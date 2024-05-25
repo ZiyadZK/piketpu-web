@@ -8,7 +8,7 @@ export default function SuratPage() {
         <MainLayoutPage>
             <Toaster />
             <div className="mt-5 dark:text-zinc-200 text-zinc-700">
-                This is Surat Izin page
+                This is Surat Izin page 2
             </div>
         </MainLayoutPage>
     )
