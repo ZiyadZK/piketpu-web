@@ -32,13 +32,13 @@ export default function MainLayoutPage({children}) {
 
     const getLoggedAkun = async () => {
         const userdata = await getLoggedUserdata()
-        console.log(userdata)
+        
         setLoggedAkun(userdata)
     }
 
     const getFilteredPath = () => {
         const updatedPath = navLink.find(item => path === item.url || (path.startsWith(item.url) && item.url !== '/'))
-        console.log(updatedPath)
+        
         setFilteredPath(updatedPath)
     }
 
@@ -234,7 +234,14 @@ function SidebarSection() {
             <div className={`px-5 ${jakarta.className}`}>
                 
                 <div className="space-y-2">
-                    {loggedAkun && navLink.map((nav, index) =>  (
+                    <a href="/" className={`flex items-center justify-between tracking-tighter text-sm ${path === '/' ? 'bg-white dark:bg-zinc-800/50 shadow-lg dark:shadow-black/50 text-zinc-800 dark:text-white' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800/50 text-zinc-400 dark:text-zinc-700 hover:text-zinc-600 dark:hover:text-zinc-500 group'}  font-medium rounded-lg px-3 py-2`}>
+                        <span className="flex items-center gap-5">
+                            <FontAwesomeIcon icon={faHouse} className={`w-4 h-4  ${path === '/' ? 'text-rose-600' : 'text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-400'} `} />
+                            Dashboard
+                        </span>
+                        <span className={`w-2 h-2 rounded-full bg-blue-600/50 animate-ping ${filteredPath && filteredPath.url === '/' ? 'block' : 'hidden'} `}></span>
+                    </a>
+                    {loggedAkun && navLinkMasterData.map((nav, index) =>  (
                         <a key={index} href={nav.url} className={`flex items-center text-sm justify-between tracking-tighter ${filteredPath && filteredPath.url.startsWith(nav.url) ? 'bg-white dark:bg-zinc-800/50 shadow-lg text-zinc-800 dark:text-zinc-400' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800/50 text-zinc-400 dark:text-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-400 group'}  font-medium rounded-lg px-3 py-2`}>
                             <span className="flex items-center gap-6">
                                 <FontAwesomeIcon icon={nav.icon} className={`w-4 h-4  ${filteredPath && filteredPath.url.startsWith(nav.url) ? 'text-blue-600' : 'text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-400'} `} />
