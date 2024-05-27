@@ -33,8 +33,6 @@ export const urlPost = async (url, payload) => {
             }
         })
 
-        console.log(response.data)
-
         return {
             success: true,
             result: response.data.success,
