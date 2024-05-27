@@ -10,12 +10,13 @@ import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
 
 const { faFileArchive, faUser, faSun, faMoon } = require("@fortawesome/free-regular-svg-icons")
-const { faHouse, faPrint, faXmark, faBars, faSpinner, faSignOut, faBook } = require("@fortawesome/free-solid-svg-icons")
+const { faHouse, faPrint, faXmark, faBars, faSpinner, faSignOut, faBook, faTimeline } = require("@fortawesome/free-solid-svg-icons")
 
 const navLinkMasterData = [
-    { title: 'Akun', icon: faUser, url: '/akun', page: 'Daftar Akun'},
-    { title: 'Surat Izin', icon: faFileArchive, url: '/surat', page: 'Daftar Surat Izin'}, 
-    { title: 'Export', icon: faPrint, url: '/export', page: 'Export Surat Izin'}
+    { title: 'Akun', icon: faUser, url: '/akun', page: 'Daftar Akun', role: ['Admin']},
+    { title: 'Surat Izin', icon: faFileArchive, url: '/surat', page: 'Daftar Surat Izin', role: ['Piket', 'Admin']}, 
+    { title: 'Export', icon: faPrint, url: '/export', page: 'Export Surat Izin', role: ['Piket', 'Admin']},
+    { title: 'Riwayat', icon: faTimeline, url: '/riwayat', page: 'Riwayat data', role: ['Admin']}
 ]
 
 const navLink = [

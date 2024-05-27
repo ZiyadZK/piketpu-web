@@ -1,12 +1,16 @@
 'use client'
 
+import { swalToast } from "@/libs/functions/toast"
+import { S_Akun_login } from "@/libs/services/S_Akun"
 import { faEnvelope, faEye } from "@fortawesome/free-regular-svg-icons"
-import { faArrowRight, faKey } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRight, faKey, faSpinner } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function LoginPage() {
+    const router = useRouter()
 
     const [loginLoading, setLoginLoading] = useState(false)
     const [showPass, setShowPass] = useState(false)
@@ -14,9 +18,34 @@ export default function LoginPage() {
         email: '', password: '', rememberMe: false
     })
 
+    const submitLoginForm = async (e) => {
+        e.preventDefault()
+
+        setLoginLoading(true)
+        const duration = loginForm.rememberMe ? 1000 * 60 * 60 * 7 : 1000 * 60 * 60 * 1
+
+        const response = await S_Akun_login(loginForm.email, loginForm.password, duration)
+        console.log(response)
+        if(response.success) {
+            swalToast.fire({
+                title: 'Berhasil login!',
+                icon: 'success'
+            }).then(() => {
+                router.push('/')
+            })
+        }else{
+            swalToast.fire({
+                title: 'Gagal untuk login!',
+                icon: 'error',
+                text: response.message
+            })
+            setLoginLoading(false)
+        }
+    }
+
     return (
         <div className="bg-gradient-to-t  from-blue-50 to-white  md:to-cyan-50 w-full h-screen flex items-center justify-center text-zinc-700">
-            <div className="p-5 md:rounded-2xl w-full h-full md:h-fit bg-transparent md:bg-white md:w-1/3 md:shadow-2xl flex md:block flex-col justify-between">
+            <form onSubmit={submitLoginForm} className="p-5 md:rounded-2xl w-full h-full md:h-fit bg-transparent md:bg-white md:w-1/3 md:shadow-2xl flex md:block flex-col justify-between">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-5">
                         <Image src={'/logo-sekolah-2.png'} width={20} height={20} alt="Logo Sekolah" />
@@ -53,16 +82,16 @@ export default function LoginPage() {
                     </div>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                    <button type="button" className="px-8 py-2 w-full md:w-fit rounded bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center gap-3 text-white hover:opacity-70 font-medium">
-                        Masuk
-                        <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4 text-inherit" />
+                    <button type="submit" disabled={loginLoading} className="px-8 py-2 w-full md:w-fit rounded bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center gap-3 text-white hover:opacity-70 font-medium">
+                        <span className={`${loginLoading ? 'hidden' : 'block'}`}>Masuk</span>
+                        <FontAwesomeIcon icon={loginLoading ? faSpinner : faArrowRight} className={`w-4 h-4 text-inherit ${loginLoading && 'animate-spin'}`} />
                     </button>
                     <button type="button" className="px-8 py-2 w-full md:w-fit rounded border md:border-0 border-zinc-700  flex items-center justify-center gap-3  opacity-70 hover:opacity-100 font-medium">
                         Lupa Password
                         <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4 text-inherit" />
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     )
 }

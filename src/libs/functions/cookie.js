@@ -1,5 +1,3 @@
-'use server'
-
 import { cookies } from "next/headers"
 
 export const cookie_get = (key) => {
@@ -17,7 +15,6 @@ export const cookie_get = (key) => {
 
 export const cookie_set = (key, value, duration) => {
     cookies().set(key, value, {
-        expires: duration,
-        secure: true
+        expires: duration
     })
 }
