@@ -231,15 +231,15 @@ export default function AkunPage() {
                 <div className="grid grid-cols-12 rounded-xl border dark:border-zinc-700 *:px-3 *:py-3">
                     <div className="col-span-3 hidden md:flex items-center text-xs md:text-lg gap-2">
                         <input type="checkbox" name="" id="" />
-                        Nama
+                        <p className="opacity-60">Nama</p>
                     </div>
-                    <div className="col-span-7 md:col-span-3 flex items-center text-xs md:text-lg">
+                    <div className="col-span-7 md:col-span-3 flex items-center text-xs md:text-lg opacity-60">
                         Email
                     </div>
-                    <div className="col-span-2 hidden md:flex items-center text-xs md:text-lg">
+                    <div className="col-span-2 hidden md:flex items-center text-xs md:text-lg opacity-60">
                         Password
                     </div>
-                    <div className="col-span-2 hidden md:flex items-center text-xs md:text-lg">
+                    <div className="col-span-2 hidden md:flex items-center text-xs md:text-lg opacity-60">
                         Role
                     </div>
                     <div className="col-span-5 md:col-span-2 flex items-center text-xs md:text-lg">
@@ -249,20 +249,20 @@ export default function AkunPage() {
                 <div className="space-y-2 my-1 relative overflow-auto max-h-[300px] md:max-h-[400px]">
                     {Array.from({ length: 20}, (_, index) => (
                         <div key={index} className="grid grid-cols-12 rounded-xl dark:hover:bg-zinc-950/50 hover:bg-zinc-100 *:px-3 *:py-3 transition-all duration-300">
-                            <div className="col-span-3 hidden md:flex items-center text-xs md:text-lg gap-2">
+                            <div className="col-span-3 hidden md:flex items-center text-xs md:text-sm gap-2">
                                 <input type="checkbox" name="" id="" />
                                 Ziyad Jahizh Kartiwa
                             </div>
-                            <div className="col-span-7 md:col-span-3 flex items-center text-xs md:text-lg opacity-100 md:opacity-60">
+                            <div className="col-span-7 md:col-span-3 flex items-center text-xs md:text-sm opacity-100 md:opacity-60">
                                 kakangtea74@gmail.com
                             </div>
-                            <div className="col-span-2 hidden md:flex items-center text-xs md:text-lg opacity-100 md:opacity-60">
+                            <div className="col-span-2 hidden md:flex items-center text-xs md:text-sm opacity-100">
                                 ziyadzk207a
                             </div>
-                            <div className="col-span-2 hidden md:flex items-center text-xs md:text-lg opacity-100 md:opacity-60">
+                            <div className="col-span-2 hidden md:flex items-center text-xs md:text-sm opacity-100 md:opacity-60">
                                 Admin
                             </div>
-                            <div className="col-span-5 md:col-span-2 flex items-center text-xs md:text-lg justify-center gap-2">
+                            <div className="col-span-5 md:col-span-2 flex items-center text-xs md:text-sm justify-center gap-2">
                                 <button type="button" onClick={() => document.getElementById(`info_akun_${index}`).showModal()} className="w-6 h-6 rounded bg-blue-500 hover:bg-blue-400 focus:bg-blue-600 md:hidden flex items-center justify-center text-white">
                                     <FontAwesomeIcon icon={faSearch} className="w-3 h-3 text-inherit" />
                                 </button>

@@ -12,18 +12,12 @@ export const date_getDay = (date) => {
         }
 
         if (delimiter) {
-            // Regex to match dd-mm-yyyy or mm-dd-yyyy
-            const datePattern = new RegExp(`^(\\d{2})${delimiter}(\\d{2})${delimiter}(\\d{4})$`);
+            // Regex to match yyyy-mm-dd or yyyy/mm/dd
+            const datePattern = new RegExp(`^(\\d{4})${delimiter}(\\d{2})${delimiter}(\\d{2})$`);
             const match = date.match(datePattern);
 
             if (match) {
-                const [ , part1, part2, year ] = match;
-                // Check if part1 and part2 are likely to be day or month
-                if (parseInt(part1) > 12) {
-                    day = part1;
-                } else {
-                    day = part2;
-                }
+                day = match[3];
             } else {
                 return 'Invalid date format';
             }
@@ -38,9 +32,11 @@ export const date_getDay = (date) => {
     return day;
 }
 
-export const date_getMonth = (date) => {
+export const date_getMonth = (format = 'number', date) => {
     let delimiter = null;
     let month;
+
+    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
     if (date) {
         if (date.includes('-')) {
@@ -50,18 +46,12 @@ export const date_getMonth = (date) => {
         }
 
         if (delimiter) {
-            // Regex to match dd-mm-yyyy or mm-dd-yyyy
-            const datePattern = new RegExp(`^(\\d{2})${delimiter}(\\d{2})${delimiter}(\\d{4})$`);
+            // Regex to match yyyy-mm-dd or yyyy/mm/dd
+            const datePattern = new RegExp(`^(\\d{4})${delimiter}(\\d{2})${delimiter}(\\d{2})$`);
             const match = date.match(datePattern);
 
             if (match) {
-                const [ , part1, part2, year ] = match;
-                // Check if part1 and part2 are likely to be day or month
-                if (parseInt(part1) > 12) {
-                    month = part2;
-                } else {
-                    month = part1;
-                }
+                month = parseInt(match[2]);
             } else {
                 return 'Invalid date format';
             }
@@ -70,10 +60,14 @@ export const date_getMonth = (date) => {
         }
     } else {
         const currentDate = new Date();
-        month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed in JS
+        month = currentDate.getMonth() + 1; // Months are zero-indexed in JS
     }
 
-    return month;
+    if (format === 'string') {
+        return monthNames[month - 1];
+    } else {
+        return String(month).padStart(2, '0'); // Return month as a zero-padded number
+    }
 }
 
 export const date_getYear = (date) => {
@@ -88,12 +82,12 @@ export const date_getYear = (date) => {
         }
 
         if (delimiter) {
-            // Regex to match dd-mm-yyyy or mm-dd-yyyy
-            const datePattern = new RegExp(`^(\\d{2})${delimiter}(\\d{2})${delimiter}(\\d{4})$`);
+            // Regex to match yyyy-mm-dd or yyyy/mm/dd
+            const datePattern = new RegExp(`^(\\d{4})${delimiter}(\\d{2})${delimiter}(\\d{2})$`);
             const match = date.match(datePattern);
 
             if (match) {
-                year = match[3];
+                year = match[1];
             } else {
                 return 'Invalid date format';
             }
@@ -108,14 +102,29 @@ export const date_getYear = (date) => {
     return year;
 }
 
-export const date_getTime = (type) => {
+
+export const date_getTime = (type, timezone = 'Asia/Jakarta') => {
     const currentDate = new Date();
     let time;
 
+    // Create a new date string in the specified time zone
+    const options = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: timezone,
+        hour12: false,
+    };
+
+    const timeString = currentDate.toLocaleString('en-GB', options);
+
+    // Extract hour and minutes from the time string
+    const [hour, minute] = timeString.split(':');
+
     if (type === 'hour') {
-        time = String(currentDate.getHours()).padStart(2, '0'); // Ensures 2-digit format
+        time = hour; // Ensures 2-digit format from toLocaleString
     } else if (type === 'minutes') {
-        time = String(currentDate.getMinutes()).padStart(2, '0'); // Ensures 2-digit format
+        time = minute; // Ensures 2-digit format from toLocaleString
     } else {
         return 'Invalid type. Use "hour" or "minutes".';
     }
