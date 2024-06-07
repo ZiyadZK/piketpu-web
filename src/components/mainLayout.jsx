@@ -14,8 +14,7 @@ const { faHouse, faPrint, faXmark, faBars, faSpinner, faSignOut, faBook, faTimel
 
 const navLinkMasterData = [
     { title: 'Akun', icon: faUser, url: '/akun', page: 'Daftar Akun', role: ['Admin']},
-    { title: 'Surat Izin', icon: faFileArchive, url: '/surat', page: 'Daftar Surat Izin', role: ['Piket', 'Admin']}, 
-    { title: 'Export', icon: faPrint, url: '/export', page: 'Export Surat Izin', role: ['Piket', 'Admin']},
+    { title: 'Surat Izin', icon: faFileArchive, url: '/surat', page: 'Daftar Surat Izin', role: ['Piket', 'Admin']},
     { title: 'Riwayat', icon: faTimeline, url: '/riwayat', page: 'Riwayat data', role: ['Admin']}
 ]
 
