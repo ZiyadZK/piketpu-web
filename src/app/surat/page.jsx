@@ -277,8 +277,8 @@ export default function SuratPage() {
                     </div>
                 </div>
                 <div className="relative w-full overflow-auto max-h-[300px] py-2">
-                    {Array.from({ length: 50 }).map((value, index) => (
-                        <div className="grid grid-cols-12 hover:bg-zinc-50/50 dark:hover:bg-zinc-950 w-full *:px-3 *:py-4 rounded">
+                    {Array.from({ length: 50 }).slice().reverse().slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
+                        <div key={index} className="grid grid-cols-12 hover:bg-zinc-50/50 dark:hover:bg-zinc-950 w-full *:px-3 *:py-4 rounded">
                             <div className="col-span-7 md:col-span-3 flex gap-3">
                                 <input type="checkbox" name="" id="" />
                                 <div className="">
@@ -326,9 +326,91 @@ export default function SuratPage() {
                                 <button type="button" className="w-6 h-6 rounded bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 text-white flex md:hidden items-center justify-center">
                                     <FontAwesomeIcon icon={faFile} className="w-3 h-3 text-inherit" />
                                 </button>
-                                <button type="button" className="w-6 h-6 rounded bg-amber-600 hover:bg-amber-500 focus:bg-amber-700 text-white flex items-center justify-center">
+                                <button type="button" onClick={() => document.getElementById(`modal_edit_surat_${index}`).showModal()} className="w-6 h-6 rounded bg-amber-600 hover:bg-amber-500 focus:bg-amber-700 text-white flex items-center justify-center">
                                     <FontAwesomeIcon icon={faEdit} className="w-3 h-3 text-inherit" />
                                 </button>
+                                <dialog id={`modal_edit_surat_${index}`} className="modal">
+                                    <div className="modal-box">
+                                        <form method="dialog">
+                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                        </form>
+                                        <h3 className="font-bold text-lg">Edit Surat</h3>
+                                        <hr className="my-3 opacity-0" />
+                                        <form className="space-y-3">
+                                            <div className="flex flex-col md:flex-row md:items-center">
+                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                    Nama Siswa
+                                                </p>
+                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                    <p>
+                                                        Ziyad Jahizh Kartiwa
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col md:flex-row md:items-center">
+                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                    Kelas
+                                                </p>
+                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                    <p>
+                                                        XII TKJ 1
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col md:flex-row md:items-center">
+                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                    Guru Piket
+                                                </p>
+                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                    <p>
+                                                        ASJDB AIWBD WABD UWABD JWA
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col md:flex-row md:items-center">
+                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                    Tanggal & Waktu
+                                                </p>
+                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                    <input type="datetime-local" className="w-fit px-3 py-1 rounded border" />
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col md:flex-row md:items-center">
+                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                    Tipe
+                                                </p>
+                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                    <select className="w-full px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none cursor-pointer dark:bg-zinc-800">
+                                                        <option value="" disabled>-- Pilih Tipe --</option>
+                                                        <option value="Mengikuti Pelajaran">Mengikuti Pelajaran</option>
+                                                        <option value="Meninggalkan Pelajaran">Meninggalkan Pelajaran</option>
+                                                        <option value="Meninggalkan Pelajaran Sementara">Meninggalkan Pelajaran Sementara</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col md:flex-row md:items-center">
+                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                    Alasan
+                                                </p>
+                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                    <input type="text" className="w-full px-3 py-1 rounded border" placeholder="Masukkan Alasan" />
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col md:flex-row md:items-center">
+                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                    Keterangan
+                                                </p>
+                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                    <input type="text" className="w-full px-3 py-1 rounded border" placeholder="Masukkan Keterangan" />
+                                                </div>
+                                            </div>
+                                            <button type="submit" className="w-full md:w-fit px-3 py-2 rounded-lg bg-green-600 hover:bg-green-500 flex items-center justify-center gap-3 text-white">
+                                                <FontAwesomeIcon icon={faSave} className="w-4 h-4 text-inherit" />
+                                                Simpan
+                                            </button>
+                                        </form>
+                                    </div>
+                                </dialog>
                                 <button type="button" className="w-6 h-6 rounded bg-red-600 hover:bg-red-500 focus:bg-red-700 text-white flex items-center justify-center">
                                     <FontAwesomeIcon icon={faTrash} className="w-3 h-3 text-inherit" />
                                 </button>
