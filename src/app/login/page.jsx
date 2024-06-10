@@ -1,7 +1,7 @@
 'use client'
 
 import { swalToast } from "@/libs/functions/toast"
-import { S_Akun_login } from "@/libs/services/S_Akun"
+import { M_Akun_login } from "@/libs/services/M_Akun"
 import { faEnvelope, faEye } from "@fortawesome/free-regular-svg-icons"
 import { faArrowRight, faKey, faSpinner } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -24,7 +24,7 @@ export default function LoginPage() {
         setLoginLoading(true)
         const duration = loginForm.rememberMe ? 1000 * 60 * 60 * 7 : 1000 * 60 * 60 * 1
 
-        const response = await S_Akun_login(loginForm.email, loginForm.password, duration)
+        const response = await M_Akun_login(loginForm.email, loginForm.password, duration)
         console.log(response)
         if(response.success) {
             swalToast.fire({

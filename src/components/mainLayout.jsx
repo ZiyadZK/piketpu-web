@@ -2,7 +2,7 @@
 
 import { jakarta } from "@/libs/fonts"
 import { getLoggedUserdata } from "@/libs/functions/userdata"
-import { logoutAkun } from "@/libs/services/S_Akun"
+import { M_Akun_logout } from "@/libs/services/M_Akun"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
@@ -89,7 +89,7 @@ export default function MainLayoutPage({children}) {
                     allowOutsideClick: false,
                     showConfirmButton: false
                 })
-                await logoutAkun();
+                await M_Akun_logout();
                Swal.close()
                 return router.push('/login')
             }
