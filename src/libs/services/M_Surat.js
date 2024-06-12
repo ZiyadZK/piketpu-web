@@ -1,6 +1,7 @@
 'use server'
 
 import { api_delete, api_get, api_post, api_put } from "../functions/web_service"
+import { M_Riwayat_log } from "./M_Riwayat"
 
 export const M_Surat_getAll = async () => {
     const response = await api_get('/v1/data/surat')
