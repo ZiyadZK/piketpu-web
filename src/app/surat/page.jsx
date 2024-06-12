@@ -1086,9 +1086,9 @@ export default function SuratPage() {
                                 <div className="flex flex-col justify-between">
                                 <p className="font-bold text-center -translate-y-1">Petugas Piket</p>
                                     <p className="font-bold text-center border-t border-zinc-700 text-zinc-700 -translate-y-1" style={{
-                                        fontSize: '6px'
+                                        fontSize: '10px'
                                     }}>
-                                        {loggedAkun.nama_akun}
+                                        {loggedAkun.nickname_akun}
                                     </p>
                                 </div>
                             </div>

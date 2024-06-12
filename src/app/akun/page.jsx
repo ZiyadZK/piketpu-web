@@ -27,6 +27,7 @@ export default function AkunPage() {
     const [filteredDataPegawai, setFilteredDataPegawai] = useState([])
     const [searchDataPegawai, setSearchDataPegawai] = useState('')
     const [selectedDataPegawai, setSelectedDataPegawai] = useState({})
+    const [fetchDataPegawai, setFetchDataPegawai] = useState('')
     
     const handleDeleteAkun = async (id_akun) => {
         Swal.fire({
@@ -75,9 +76,10 @@ export default function AkunPage() {
             id_akun: get_uuid(),
             id_guru_piket_akun: selectedDataPegawai['id_guru_piket_akun'],
             nama_akun: selectedDataPegawai['nama_akun'],
-            email_akun: event.target[0].value,
-            password_akun: event.target[1].value,
-            role_akun: event.target[2].value
+            nickname_akun: event.target[0].value,
+            email_akun: event.target[1].value,
+            password_akun: event.target[2].value,
+            role_akun: event.target[3].value
         }
 
         if(Object.values(jsonBody).includes(undefined)) {
@@ -135,9 +137,10 @@ export default function AkunPage() {
         event.preventDefault()
 
         const payload = {
-            email_akun: event.target[0].value,
-            password_akun: event.target[1].value,
-            role_akun: event.target[2].value
+            nickname_akun: event.target[0].value,
+            email_akun: event.target[1].value,
+            password_akun: event.target[2].value,
+            role_akun: event.target[3].value
         }
 
         document.getElementById(modal).close()
@@ -209,6 +212,7 @@ export default function AkunPage() {
             setDataPegawai(response.data)
             setFilteredDataPegawai(response.data)
         }
+        setFetchDataPegawai('fetched')
     }
 
     useEffect(() => {
@@ -277,18 +281,26 @@ export default function AkunPage() {
                                 Jabatan
                             </p>
                         </div>
-                        <div className="py-2 relative w-full overflow-auto max-h-[250px]">
-                            {filteredDataPegawai.map((value, index) => (
-                                <button type="button" onClick={() => selectDataPegawai(value['id_pegawai'], value['nama_pegawai'])} key={index} className="flex items-center p-3 rounded-lg  hover:bg-zinc-50 dark:hover:bg-zinc-700/50 w-full text-start">
-                                    <p className="w-3/5 text-xs">
-                                        {value['nama_pegawai']}
-                                    </p>
-                                    <p className="w-2/5 text-xs opacity-50">
-                                        {value['jabatan']}
-                                    </p>
-                                </button>
-                            ))}
-                        </div>
+                        {fetchDataPegawai !== 'fetched' && (
+                            <div className="w-full flex items-center justify-center gap-3 py-5 opacity-50">
+                                <div className="loading loading-md loading-spinner"></div>
+                                Sedang mendapatkan data
+                            </div>
+                        )}
+                        {fetchDataPegawai === 'fetched' && (
+                            <div className="py-2 relative w-full overflow-auto max-h-[250px]">
+                                {filteredDataPegawai.map((value, index) => (
+                                    <button type="button" onClick={() => selectDataPegawai(value['id_pegawai'], value['nama_pegawai'])} key={index} className="flex items-center p-3 rounded-lg  hover:bg-zinc-50 dark:hover:bg-zinc-700/50 w-full text-start">
+                                        <p className="w-3/5 text-xs">
+                                            {value['nama_pegawai']}
+                                        </p>
+                                        <p className="w-2/5 text-xs opacity-50">
+                                            {value['jabatan']}
+                                        </p>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                         <hr className="my-2 opacity-0" />
                         <form onSubmitCapture={(e) => submitTambahAkun(e, "tambah_akun")} className="space-y-2">
                             <div className="flex flex-col md:flex-row md:items-center gap-1">
@@ -306,6 +318,12 @@ export default function AkunPage() {
                                 <p className="w-full md:w-3/5">
                                     {selectedDataPegawai['nama_akun']}
                                 </p>
+                            </div>
+                            <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                <p className="opacity-70 w-full md:w-2/5">
+                                    Nickname
+                                </p>
+                                <input type="text" required className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Nama Pendek" />
                             </div>
                             <div className="flex flex-col md:flex-row md:items-center gap-1">
                                 <p className="opacity-70 w-full md:w-2/5">
@@ -368,7 +386,13 @@ export default function AkunPage() {
                             <div key={index} className="grid grid-cols-12 rounded-xl dark:hover:bg-zinc-950/50 hover:bg-zinc-100 *:px-3 *:py-3 transition-all duration-300">
                                 <div className="col-span-3 hidden md:flex items-center text-xs md:text-sm gap-2">
                                     <input type="checkbox" checked={selectedData.includes(value['id_akun'])} onChange={() => handleSelectedData(value['id_akun'])} />
-                                    {value['nama_akun']}
+                                    <div className="">
+                                        {value['nama_akun']}
+                                        <p className="text-xs opacity-50">
+                                            {value['nickname_akun']}
+                                        </p>
+                                    </div>
+                                    
                                 </div>
                                 <div className="col-span-7 md:col-span-3 flex items-center text-xs md:text-sm opacity-100 md:opacity-60">
                                     {value['email_akun']}
@@ -391,6 +415,12 @@ export default function AkunPage() {
                                             <h3 className="font-bold text-lg">Info Akun</h3>
                                             <hr className="my-2 opacity-0" />
                                             <div className="space-y-2">
+                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                                    <p className="opacity-70 w-full md:w-2/5">
+                                                        Nickname
+                                                    </p>
+                                                    <input type="text" required className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Nama Pendek" />
+                                                </div>
                                                 <div className="flex flex-col md:flex-row md:items-center gap-1">
                                                     <p className="opacity-70 w-full md:w-2/5">
                                                         Email
@@ -432,6 +462,12 @@ export default function AkunPage() {
                                             <h3 className="font-bold text-lg">Ubah Akun</h3>
                                             <hr className="my-2 opacity-0" />
                                             <form onSubmit={e => submitUbahAkun(e, `ubah_akun_${index}`, value['id_akun'])} className="space-y-2">
+                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                                    <p className="opacity-70 w-full md:w-2/5">
+                                                        Nickname
+                                                    </p>
+                                                    <input type="text" defaultValue={value['nickname_akun']} required className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Nickname" />
+                                                </div>
                                                 <div className="flex flex-col md:flex-row md:items-center gap-1">
                                                     <p className="opacity-70 w-full md:w-2/5">
                                                         Email
