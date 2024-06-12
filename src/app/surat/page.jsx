@@ -46,6 +46,7 @@ export default function SuratPage() {
 
     const [searchSiswa, setSearchSiswa] = useState('')
     const [searchPiket, setSearchPiket] = useState('')
+    const [searchDataSiswa, setSearchDataSiswa] = useState('')
 
     const [selectedSiswa, setSelectedSiswa] = useState([])
 
@@ -417,6 +418,19 @@ export default function SuratPage() {
         console.log(componentPDF)
     }
 
+    useEffect(() => {
+        let updatedData = dataSiswa
+        if(searchDataSiswa !== '') {
+            updatedData = updatedData.filter(value => 
+                value['nama_siswa'].toLowerCase().includes(searchDataSiswa.toLowerCase()) ||
+                value['nis'].toLowerCase().includes(searchDataSiswa.toLowerCase()) ||
+                value['nisn'].toLowerCase().includes(searchDataSiswa.toLowerCase()) ||
+                value['nik'].toLowerCase().includes(searchDataSiswa.toLowerCase())
+            )
+        }
+        setFilteredDataSiswa(updatedData)
+    }, [searchDataSiswa])
+
     return (
         <MainLayoutPage>
             <Toaster />
@@ -498,7 +512,7 @@ export default function SuratPage() {
                             <p className="w-full md:w-2/5 opacity-70">
                                 Pilih Siswa
                             </p>
-                            <input type="text" className="w-full md:w-3/5 px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none" placeholder="Cari disini" />
+                            <input type="text" value={searchDataSiswa} onChange={e => setSearchDataSiswa(e.target.value)} className="w-full md:w-3/5 px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none" placeholder="Cari disini" />
                         </div>
                         <hr className="my-1 opacity-0" />
                         <div className="space-y-2 relative overflow-auto w-full max-h-[300px]">
