@@ -1,8 +1,9 @@
 'use client'
 
 import MainLayoutPage from "@/components/mainLayout"
+import { date_getDay, date_getMonth, date_getYear } from "@/libs/functions/date"
 import { M_Riwayat_getAll } from "@/libs/services/M_Riwayat"
-import { faCalendar, faClock } from "@fortawesome/free-regular-svg-icons"
+import { faCalendar, faClock, faEdit } from "@fortawesome/free-regular-svg-icons"
 import { faAngleLeft, faAngleRight, faPlus, faSearch, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
@@ -65,31 +66,45 @@ export default function RiwayatPage() {
                 </div>
             </div>
             <div className="py-3 relative overflow-auto w-full max-h-[500px] text-xs dark:text-white text-zinc-700">
-                {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((_, index) => (
+                {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
                     <div key={index} className="grid grid-cols-12 px-4 py-3">
                         <div className="hidden md:flex items-center col-span-2 ">
                             <div className="flex items-center gap-3 w-fit px-3 py-2 rounded-full bg-zinc-100 dark:bg-zinc-800">
                                 <FontAwesomeIcon icon={faCalendar} className="w-3 h-3 text-inherit" />
-                                20 November 2023
+                                {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}
                             </div>
                         </div>
                         <div className="hidden md:flex items-center col-span-2 ">
                             <div className="flex items-center gap-3 w-fit px-3 py-2 rounded-full bg-zinc-100 dark:bg-zinc-800">
                                 <FontAwesomeIcon icon={faClock} className="w-3 h-3 text-inherit" />
-                                20:21
+                                {value['waktu']}
                             </div>
                         </div>
                         <div className="flex items-center col-span-7 md:col-span-2 ">
-                            Ziyad Jahizh Kartiwa
+                        {value['nama_akun']}
                         </div>
                         <div className="hidden md:flex items-center col-span-2 ">
-                            <div className="flex items-center gap-3 bg-green-500 text-white dark:bg-green-500/10 dark:text-green-400 w-fit px-3 py-2 rounded-full">
-                                <FontAwesomeIcon icon={faPlus} className="w-3 h-3 text-inherit" />
-                                Tambah
-                            </div>
+                            {value['aksi'] === 'Tambah' && (
+                                <div className="flex items-center gap-3 bg-green-500 text-white dark:bg-green-500/10 dark:text-green-400 w-fit px-3 py-2 rounded-full">
+                                    <FontAwesomeIcon icon={faPlus} className="w-3 h-3 text-inherit" />
+                                    {value['aksi']}
+                                </div>
+                            )}
+                            {value['aksi'] === 'Ubah' && (
+                                <div className="flex items-center gap-3 bg-amber-500 text-white dark:bg-amber-500/10 dark:text-amber-400 w-fit px-3 py-2 rounded-full">
+                                    <FontAwesomeIcon icon={faEdit} className="w-3 h-3 text-inherit" />
+                                    {value['aksi']}
+                                </div>
+                            )}
+                            {value['aksi'] === 'Hapus' && (
+                                <div className="flex items-center gap-3 bg-red-500 text-white dark:bg-red-500/10 dark:text-red-400 w-fit px-3 py-2 rounded-full">
+                                    <FontAwesomeIcon icon={faTrash} className="w-3 h-3 text-inherit" />
+                                    {value['aksi']}
+                                </div>
+                            )}
                         </div>
                         <div className="hidden md:flex items-center col-span-2 ">
-                            Menambahkan 1 data ke dalam Data Surat
+                        {value['keterangan']}
                         </div>
                         <div className="flex items-center col-span-5 md:col-span-2 justify-center">
                             <button type="button" className="px-3 py-2 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center gap-3 w-fit">
