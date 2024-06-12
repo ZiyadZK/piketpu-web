@@ -711,238 +711,246 @@ export default function SuratPage() {
                         <FontAwesomeIcon icon={faEllipsisH} className="w-4 h-4 text-inherit" />
                     </div>
                 </div>
-                <div className="relative w-full overflow-auto max-h-[300px] py-2">
-                    {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
-                        <div key={index} className="grid grid-cols-12 hover:bg-zinc-50/50 dark:hover:bg-zinc-950 w-full *:px-3 *:py-4 rounded">
-                            <div className="col-span-7 md:col-span-3 flex gap-3">
-                                <input type="checkbox" checked={selectedData.includes(value['id_surat_izin'])} onChange={() => selectData(value['id_surat_izin'])} />
-                                <div className="">
-                                    <div className="hidden md:flex items-center gap-2 font-medium">
-                                        <div className="flex items-center gap-2 text-xs rounded-full px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-500">
-                                            <FontAwesomeIcon icon={faCalendar} className="w-3 h-3 text-inherit" />
-                                            {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}
+                {loadingFetch !== 'fetched' && (
+                    <div className="w-full py-5 flex justify-center items-center gap-3">
+                        <div className="loading loading-spinner loading-md text-zinc-500"></div>
+                        <p className="opacity-50">Sedang mendapatkan data</p>
+                    </div>
+                )}
+                {loadingFetch === 'fetched' && (
+                    <div className="relative w-full overflow-auto max-h-[300px] py-2">
+                        {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
+                            <div key={index} className="grid grid-cols-12 hover:bg-zinc-50/50 dark:hover:bg-zinc-950 w-full *:px-3 *:py-4 rounded">
+                                <div className="col-span-7 md:col-span-3 flex gap-3">
+                                    <input type="checkbox" checked={selectedData.includes(value['id_surat_izin'])} onChange={() => selectData(value['id_surat_izin'])} />
+                                    <div className="">
+                                        <div className="hidden md:flex items-center gap-2 font-medium">
+                                            <div className="flex items-center gap-2 text-xs rounded-full px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-500">
+                                                <FontAwesomeIcon icon={faCalendar} className="w-3 h-3 text-inherit" />
+                                                {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}
+                                            </div>
+                                            <div className="flex items-center gap-2 text-xs rounded-full px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-500">
+                                                <FontAwesomeIcon icon={faClock} className="w-3 h-3 text-inherit" />
+                                                {value['waktu']}
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-2 text-xs rounded-full px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-500">
-                                            <FontAwesomeIcon icon={faClock} className="w-3 h-3 text-inherit" />
-                                            {value['waktu']}
-                                        </div>
+                                        <hr className=" my-1 opacity-0 hidden md:block" />
+                                        <a href={`https://simak.smkpunegerijabar.sch.id/data/siswa/nis/${value['nis_siswa']}`} target="_blank" className="hover:underline text-xs md:text-sm">
+                                            {value['nama_siswa']}
+                                        </a>
                                     </div>
-                                    <hr className=" my-1 opacity-0 hidden md:block" />
-                                    <a href={`https://simak.smkpunegerijabar.sch.id/data/siswa/nis/${value['nis_siswa']}`} target="_blank" className="hover:underline text-xs md:text-sm">
-                                        {value['nama_siswa']}
+                                </div>
+                                <div className="hidden md:flex items-center gap-3 opacity-60 text-xs md:text-sm">
+                                    {value['kelas']} {value['jurusan']} {value['rombel']}
+                                </div> 
+                                <div className="col-span-2 hidden md:flex items-center gap-3 text-xs md:text-sm">
+                                    <div className="space-y-1">
+                                        {value['tipe'] === 'Mengikuti Pelajaran' && (
+                                            <p className="text-xs px-2 py-1 rounded-full bg-green-500 dark:bg-green-500/10 dark:text-green-500 text-white font-medium">
+                                                Mengikuti Pelajaran
+                                            </p>
+                                        )}
+                                        {value['tipe'] === 'Meninggalkan Pelajaran Sementara' && (
+                                            <p className="text-xs px-2 py-1 rounded-full bg-blue-500 dark:bg-blue-500/10 dark:text-blue-500 text-white font-medium">
+                                                Meninggalkan Pelajaran
+                                            </p>
+                                        )}
+                                        {value['tipe'] === 'Meninggalkan Pelajaran' && (
+                                            <p className="text-xs px-2 py-1 rounded-full bg-red-500 dark:bg-red-500/10 dark:text-red-500 text-white font-medium">
+                                                Meninggalkan Pelajaran
+                                            </p>
+                                        )}
+                                        <p>
+                                            {value['alasan']}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="col-span-2 hidden md:flex items-center gap-3 opacity-60 text-xs md:text-sm">
+                                    {value['keterangan']}
+                                </div>
+                                <div className="col-span-2 hidden md:flex items-center gap-3 text-xs md:text-sm">
+                                    <a href={`https://simak.smkpunegerijabar.sch.id/data/pegawai/${value['id_guru_piket']}`} className="hover:underline">
+                                        {value['nama_guru_piket']}
                                     </a>
                                 </div>
-                            </div>
-                            <div className="hidden md:flex items-center gap-3 opacity-60 text-xs md:text-sm">
-                                {value['kelas']} {value['jurusan']} {value['rombel']}
-                            </div> 
-                            <div className="col-span-2 hidden md:flex items-center gap-3 text-xs md:text-sm">
-                                <div className="space-y-1">
-                                    {value['tipe'] === 'Mengikuti Pelajaran' && (
-                                        <p className="text-xs px-2 py-1 rounded-full bg-green-500 dark:bg-green-500/10 dark:text-green-500 text-white font-medium">
-                                            Mengikuti Pelajaran
-                                        </p>
+                                <div className="col-span-5 md:col-span-2 flex items-center justify-center md:gap-2 gap-1">
+                                    {renderSingleProcess !== 'loading' && (
+                                        <button type="button" onClick={() => printPrintedData(value['id_surat_izin'])} className="w-6 h-6 rounded bg-cyan-600 hover:bg-cyan-500 focus:bg-cyan-700 text-white flex items-center justify-center">
+                                            <FontAwesomeIcon icon={faPrint} className="w-3 h-3 text-inherit" />
+                                        </button>
                                     )}
-                                    {value['tipe'] === 'Meninggalkan Pelajaran Sementara' && (
-                                        <p className="text-xs px-2 py-1 rounded-full bg-blue-500 dark:bg-blue-500/10 dark:text-blue-500 text-white font-medium">
-                                            Meninggalkan Pelajaran
-                                        </p>
-                                    )}
-                                    {value['tipe'] === 'Meninggalkan Pelajaran' && (
-                                        <p className="text-xs px-2 py-1 rounded-full bg-red-500 dark:bg-red-500/10 dark:text-red-500 text-white font-medium">
-                                            Meninggalkan Pelajaran
-                                        </p>
-                                    )}
-                                    <p>
-                                        {value['alasan']}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="col-span-2 hidden md:flex items-center gap-3 opacity-60 text-xs md:text-sm">
-                                {value['keterangan']}
-                            </div>
-                            <div className="col-span-2 hidden md:flex items-center gap-3 text-xs md:text-sm">
-                                <a href={`https://simak.smkpunegerijabar.sch.id/data/pegawai/${value['id_guru_piket']}`} className="hover:underline">
-                                    {value['nama_guru_piket']}
-                                </a>
-                            </div>
-                            <div className="col-span-5 md:col-span-2 flex items-center justify-center md:gap-2 gap-1">
-                                {renderSingleProcess !== 'loading' && (
-                                    <button type="button" onClick={() => printPrintedData(value['id_surat_izin'])} className="w-6 h-6 rounded bg-cyan-600 hover:bg-cyan-500 focus:bg-cyan-700 text-white flex items-center justify-center">
-                                        <FontAwesomeIcon icon={faPrint} className="w-3 h-3 text-inherit" />
-                                    </button>
-                                )}
-                                {renderSingleProcess === 'loading' && (
-                                    <div className="w-6 h-6 flex items-center justify-center">
-                                        <div className="loading loading-spinner loading-sm text-zinc-500"></div>
-                                    </div>
-                                )}
-                                <button type="button" onClick={() => document.getElementById(`info_modal_${index}`).showModal()} className="w-6 h-6 rounded bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 text-white flex md:hidden items-center justify-center">
-                                    <FontAwesomeIcon icon={faFile} className="w-3 h-3 text-inherit" />
-                                </button>
-                                <dialog id={`info_modal_${index}`} className="modal md:hidden">
-                                    <div className="modal-box dark:bg-zinc-800">
-                                        <form method="dialog">
-                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                        </form>
-                                        <h3 className="font-bold text-lg">Informasi Surat</h3>
-                                        <hr className="my-2 opacity-0" />
-                                        <div className="space-y-3">
-                                            <div className="flex flex-col gap-1">
-                                                <p className="text-xs opacity-50">
-                                                    Nama
-                                                </p>
-                                                <p className="text-sm font-medium">
-                                                    {value['nama_siswa']}
-                                                </p>
-                                            </div>
-                                            <div className="flex flex-col gap-1">
-                                                <p className="text-xs opacity-50">
-                                                    Tanggal, Waktu
-                                                </p>
-                                                <p className="text-sm font-medium">
-                                                    {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}, {value['waktu']}
-                                                </p>
-                                            </div>
-                                            <div className="flex flex-col gap-1">
-                                                <p className="text-xs opacity-50">
-                                                    Tipe
-                                                </p>
-                                                {value['tipe'] === 'Mengikuti Pelajaran' && (
-                                                    <p className="text-xs px-2 py-1 rounded-full bg-green-500 dark:bg-green-500/10 dark:text-green-500 text-white font-medium w-fit">
-                                                        Mengikuti Pelajaran
-                                                    </p>
-                                                )}
-                                                {value['tipe'] === 'Meninggalkan Pelajaran Sementara' && (
-                                                    <p className="text-xs px-2 py-1 rounded-full bg-blue-500 dark:bg-blue-500/10 dark:text-blue-500 text-white font-medium w-fit">
-                                                        Meninggalkan Pelajaran
-                                                    </p>
-                                                )}
-                                                {value['tipe'] === 'Meninggalkan Pelajaran' && (
-                                                    <p className="text-xs px-2 py-1 rounded-full bg-red-500 dark:bg-red-500/10 dark:text-red-500 text-white font-medium w-fit">
-                                                        Meninggalkan Pelajaran
-                                                    </p>
-                                                )}
-                                            </div>
-                                            <div className="flex flex-col gap-1">
-                                                <p className="text-xs opacity-50">
-                                                    Alasan
-                                                </p>
-                                                <p className="text-sm font-medium">
-                                                    {value['alasan']}
-                                                </p>
-                                            </div>
-                                            <div className="flex flex-col gap-1">
-                                                <p className="text-xs opacity-50">
-                                                    Keterangan
-                                                </p>
-                                                <p className="text-sm font-medium">
-                                                    {value['keterangan']}
-                                                </p>
-                                            </div>
-                                            <div className="flex flex-col gap-1">
-                                                <p className="text-xs opacity-50">
-                                                    Guru Piket
-                                                </p>
-                                                <p className="text-sm font-medium">
-                                                    {value['nama_guru_piket']}
-                                                </p>
-                                            </div>
+                                    {renderSingleProcess === 'loading' && (
+                                        <div className="w-6 h-6 flex items-center justify-center">
+                                            <div className="loading loading-spinner loading-sm text-zinc-500"></div>
                                         </div>
-                                    </div>
-                                </dialog>
-                                <button type="button" onClick={() => document.getElementById(`modal_edit_surat_${index}`).showModal()} className="w-6 h-6 rounded bg-amber-600 hover:bg-amber-500 focus:bg-amber-700 text-white flex items-center justify-center">
-                                    <FontAwesomeIcon icon={faEdit} className="w-3 h-3 text-inherit" />
-                                </button>
-                                <dialog id={`modal_edit_surat_${index}`} className="modal">
-                                    <div className="modal-box dark:bg-zinc-800">
-                                        <form method="dialog">
-                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                        </form>
-                                        <h3 className="font-bold text-lg">Edit Surat</h3>
-                                        <hr className="my-3 opacity-0" />
-                                        <form onSubmit={(e) => submitFormEdit(e, `modal_edit_surat_${index}`, value['id_surat_izin'])} className="space-y-3">
-                                            <div className="flex flex-col md:flex-row md:items-center">
-                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
-                                                    Nama Siswa
-                                                </p>
-                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
-                                                    <p>
+                                    )}
+                                    <button type="button" onClick={() => document.getElementById(`info_modal_${index}`).showModal()} className="w-6 h-6 rounded bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 text-white flex md:hidden items-center justify-center">
+                                        <FontAwesomeIcon icon={faFile} className="w-3 h-3 text-inherit" />
+                                    </button>
+                                    <dialog id={`info_modal_${index}`} className="modal md:hidden">
+                                        <div className="modal-box dark:bg-zinc-800">
+                                            <form method="dialog">
+                                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                            </form>
+                                            <h3 className="font-bold text-lg">Informasi Surat</h3>
+                                            <hr className="my-2 opacity-0" />
+                                            <div className="space-y-3">
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-xs opacity-50">
+                                                        Nama
+                                                    </p>
+                                                    <p className="text-sm font-medium">
                                                         {value['nama_siswa']}
                                                     </p>
                                                 </div>
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center">
-                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
-                                                    Kelas
-                                                </p>
-                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
-                                                    <p>
-                                                        {value['kelas']} {value['jurusan']} {value['rombel']}
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-xs opacity-50">
+                                                        Tanggal, Waktu
+                                                    </p>
+                                                    <p className="text-sm font-medium">
+                                                        {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}, {value['waktu']}
+                                                    </p>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-xs opacity-50">
+                                                        Tipe
+                                                    </p>
+                                                    {value['tipe'] === 'Mengikuti Pelajaran' && (
+                                                        <p className="text-xs px-2 py-1 rounded-full bg-green-500 dark:bg-green-500/10 dark:text-green-500 text-white font-medium w-fit">
+                                                            Mengikuti Pelajaran
+                                                        </p>
+                                                    )}
+                                                    {value['tipe'] === 'Meninggalkan Pelajaran Sementara' && (
+                                                        <p className="text-xs px-2 py-1 rounded-full bg-blue-500 dark:bg-blue-500/10 dark:text-blue-500 text-white font-medium w-fit">
+                                                            Meninggalkan Pelajaran
+                                                        </p>
+                                                    )}
+                                                    {value['tipe'] === 'Meninggalkan Pelajaran' && (
+                                                        <p className="text-xs px-2 py-1 rounded-full bg-red-500 dark:bg-red-500/10 dark:text-red-500 text-white font-medium w-fit">
+                                                            Meninggalkan Pelajaran
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-xs opacity-50">
+                                                        Alasan
+                                                    </p>
+                                                    <p className="text-sm font-medium">
+                                                        {value['alasan']}
+                                                    </p>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-xs opacity-50">
+                                                        Keterangan
+                                                    </p>
+                                                    <p className="text-sm font-medium">
+                                                        {value['keterangan']}
+                                                    </p>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-xs opacity-50">
+                                                        Guru Piket
+                                                    </p>
+                                                    <p className="text-sm font-medium">
+                                                        {value['nama_guru_piket']}
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div className="flex flex-col md:flex-row md:items-center">
-                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
-                                                    Guru Piket
-                                                </p>
-                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
-                                                    <p>
-                                                    {value['nama_guru_piket']}
+                                        </div>
+                                    </dialog>
+                                    <button type="button" onClick={() => document.getElementById(`modal_edit_surat_${index}`).showModal()} className="w-6 h-6 rounded bg-amber-600 hover:bg-amber-500 focus:bg-amber-700 text-white flex items-center justify-center">
+                                        <FontAwesomeIcon icon={faEdit} className="w-3 h-3 text-inherit" />
+                                    </button>
+                                    <dialog id={`modal_edit_surat_${index}`} className="modal">
+                                        <div className="modal-box dark:bg-zinc-800">
+                                            <form method="dialog">
+                                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                            </form>
+                                            <h3 className="font-bold text-lg">Edit Surat</h3>
+                                            <hr className="my-3 opacity-0" />
+                                            <form onSubmit={(e) => submitFormEdit(e, `modal_edit_surat_${index}`, value['id_surat_izin'])} className="space-y-3">
+                                                <div className="flex flex-col md:flex-row md:items-center">
+                                                    <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                        Nama Siswa
                                                     </p>
+                                                    <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                        <p>
+                                                            {value['nama_siswa']}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center">
-                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
-                                                    Tanggal & Waktu
-                                                </p>
-                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
-                                                    <input required defaultValue={`${value['tanggal']}T${value['waktu']}`} type="datetime-local" className="w-fit px-3 py-1 rounded border dark:bg-zinc-800 dark:border-zinc-700" />
+                                                <div className="flex flex-col md:flex-row md:items-center">
+                                                    <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                        Kelas
+                                                    </p>
+                                                    <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                        <p>
+                                                            {value['kelas']} {value['jurusan']} {value['rombel']}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center">
-                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
-                                                    Tipe
-                                                </p>
-                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
-                                                    <select required defaultValue={value['tipe']} className="w-full px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none cursor-pointer dark:bg-zinc-800">
-                                                        <option value="" disabled>-- Pilih Tipe --</option>
-                                                        <option value="Mengikuti Pelajaran">Mengikuti Pelajaran</option>
-                                                        <option value="Meninggalkan Pelajaran">Meninggalkan Pelajaran</option>
-                                                        <option value="Meninggalkan Pelajaran Sementara">Meninggalkan Pelajaran Sementara</option>
-                                                    </select>
+                                                <div className="flex flex-col md:flex-row md:items-center">
+                                                    <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                        Guru Piket
+                                                    </p>
+                                                    <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                        <p>
+                                                        {value['nama_guru_piket']}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center">
-                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
-                                                    Alasan
-                                                </p>
-                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
-                                                    <input required defaultValue={value['alasan']} type="text" className="w-full px-3 py-1 rounded border dark:bg-zinc-800 dark:border-zinc-700" placeholder="Masukkan Alasan" />
+                                                <div className="flex flex-col md:flex-row md:items-center">
+                                                    <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                        Tanggal & Waktu
+                                                    </p>
+                                                    <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                        <input required defaultValue={`${value['tanggal']}T${value['waktu']}`} type="datetime-local" className="w-fit px-3 py-1 rounded border dark:bg-zinc-800 dark:border-zinc-700" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center">
-                                                <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
-                                                    Keterangan
-                                                </p>
-                                                <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
-                                                    <input required defaultValue={value['keterangan']} type="text" className="w-full px-3 py-1 rounded border dark:bg-zinc-800 dark:border-zinc-700" placeholder="Masukkan Keterangan" />
+                                                <div className="flex flex-col md:flex-row md:items-center">
+                                                    <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                        Tipe
+                                                    </p>
+                                                    <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                        <select required defaultValue={value['tipe']} className="w-full px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none cursor-pointer dark:bg-zinc-800">
+                                                            <option value="" disabled>-- Pilih Tipe --</option>
+                                                            <option value="Mengikuti Pelajaran">Mengikuti Pelajaran</option>
+                                                            <option value="Meninggalkan Pelajaran">Meninggalkan Pelajaran</option>
+                                                            <option value="Meninggalkan Pelajaran Sementara">Meninggalkan Pelajaran Sementara</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <button type="submit" className="w-full md:w-fit px-3 py-2 rounded-lg bg-green-600 hover:bg-green-500 flex items-center justify-center gap-3 text-white">
-                                                <FontAwesomeIcon icon={faSave} className="w-4 h-4 text-inherit" />
-                                                Simpan
-                                            </button>
-                                        </form>
-                                    </div>
-                                </dialog>
-                                <button type="button" onClick={() => submitDeleteData(value['id_surat_izin'])} className="w-6 h-6 rounded bg-red-600 hover:bg-red-500 focus:bg-red-700 text-white flex items-center justify-center">
-                                    <FontAwesomeIcon icon={faTrash} className="w-3 h-3 text-inherit" />
-                                </button>
+                                                <div className="flex flex-col md:flex-row md:items-center">
+                                                    <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                        Alasan
+                                                    </p>
+                                                    <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                        <input required defaultValue={value['alasan']} type="text" className="w-full px-3 py-1 rounded border dark:bg-zinc-800 dark:border-zinc-700" placeholder="Masukkan Alasan" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col md:flex-row md:items-center">
+                                                    <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
+                                                        Keterangan
+                                                    </p>
+                                                    <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
+                                                        <input required defaultValue={value['keterangan']} type="text" className="w-full px-3 py-1 rounded border dark:bg-zinc-800 dark:border-zinc-700" placeholder="Masukkan Keterangan" />
+                                                    </div>
+                                                </div>
+                                                <button type="submit" className="w-full md:w-fit px-3 py-2 rounded-lg bg-green-600 hover:bg-green-500 flex items-center justify-center gap-3 text-white">
+                                                    <FontAwesomeIcon icon={faSave} className="w-4 h-4 text-inherit" />
+                                                    Simpan
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </dialog>
+                                    <button type="button" onClick={() => submitDeleteData(value['id_surat_izin'])} className="w-6 h-6 rounded bg-red-600 hover:bg-red-500 focus:bg-red-700 text-white flex items-center justify-center">
+                                        <FontAwesomeIcon icon={faTrash} className="w-3 h-3 text-inherit" />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
                 <div className="flex flex-col md:flex-row gap-3 md:gap-0 md:items-center md:justify-between text-xs md:text-sm my-3">
                     <div className="flex md:items-center gap-2 md:justify-start justify-between">
                         <div className="flex items-center gap-2">

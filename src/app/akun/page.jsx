@@ -356,112 +356,120 @@ export default function AkunPage() {
                         <input type="text" value={searchValue} onChange={e => setSearchValue(e.target.value)} className="w-full px-3 py-1 rounded outline-none dark:bg-zinc-800 bg-zinc-100" placeholder="Cari" />
                     </div>
                 </div>
-                <div className="space-y-2 my-1 relative overflow-auto max-h-[300px] md:max-h-[400px]">
-                    {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
-                        <div key={index} className="grid grid-cols-12 rounded-xl dark:hover:bg-zinc-950/50 hover:bg-zinc-100 *:px-3 *:py-3 transition-all duration-300">
-                            <div className="col-span-3 hidden md:flex items-center text-xs md:text-sm gap-2">
-                                <input type="checkbox" checked={selectedData.includes(value['id_akun'])} onChange={() => handleSelectedData(value['id_akun'])} />
-                                {value['nama_akun']}
-                            </div>
-                            <div className="col-span-7 md:col-span-3 flex items-center text-xs md:text-sm opacity-100 md:opacity-60">
-                                {value['email_akun']}
-                            </div>
-                            <div className="col-span-2 hidden md:flex items-center text-xs md:text-sm opacity-100">
-                                {value['password_akun']}
-                            </div>
-                            <div className="col-span-2 hidden md:flex items-center text-xs md:text-sm opacity-100 md:opacity-60">
-                                {value['role_akun']}
-                            </div>
-                            <div className="col-span-5 md:col-span-2 flex items-center text-xs md:text-sm justify-center gap-2">
-                                <button type="button" onClick={() => document.getElementById(`info_akun_${index}`).showModal()} className="w-6 h-6 rounded bg-blue-500 hover:bg-blue-400 focus:bg-blue-600 md:hidden flex items-center justify-center text-white">
-                                    <FontAwesomeIcon icon={faSearch} className="w-3 h-3 text-inherit" />
-                                </button>
-                                <dialog id={`info_akun_${index}`} className="modal">
-                                    <div className="modal-box bg-white dark:bg-zinc-800">
-                                        <form method="dialog">
-                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                        </form>
-                                        <h3 className="font-bold text-lg">Info Akun</h3>
-                                        <hr className="my-2 opacity-0" />
-                                        <div className="space-y-2">
-                                            <div className="flex flex-col md:flex-row md:items-center gap-1">
-                                                <p className="opacity-70 w-full md:w-2/5">
-                                                    Email
-                                                </p>
-                                                <input disabled type="text" className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Email" />
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center gap-1">
-                                                <p className="opacity-70 w-full md:w-2/5">
-                                                    Password
-                                                </p>
-                                                <input disabled type="text" className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Password" />
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center gap-1">
-                                                <p className="opacity-70 w-full md:w-2/5">
-                                                    Nama
-                                                </p>
-                                                <input disabled type="text" className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Nama" />
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center gap-1">
-                                                <p className="opacity-70 w-full md:w-2/5">
-                                                    Role
-                                                </p>
-                                                <select disabled className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700 cursor-pointer">
-                                                    <option value="Piket">Piket</option>
-                                                    <option value="Admin">Admin</option>
-                                                </select>
+                {loadingFetch !== 'fetched' && (
+                    <div className="w-full flex justify-center items-center gap-5 py-5">
+                        <div className="loading loading-md loading-spinner text-zinc-500"></div>
+                        <p className="opacity-50">Sedang mendapatkan data</p>
+                    </div>
+                )}
+                {loadingFetch === 'fetched' && (
+                    <div className="space-y-2 my-1 relative overflow-auto max-h-[300px] md:max-h-[400px]">
+                        {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
+                            <div key={index} className="grid grid-cols-12 rounded-xl dark:hover:bg-zinc-950/50 hover:bg-zinc-100 *:px-3 *:py-3 transition-all duration-300">
+                                <div className="col-span-3 hidden md:flex items-center text-xs md:text-sm gap-2">
+                                    <input type="checkbox" checked={selectedData.includes(value['id_akun'])} onChange={() => handleSelectedData(value['id_akun'])} />
+                                    {value['nama_akun']}
+                                </div>
+                                <div className="col-span-7 md:col-span-3 flex items-center text-xs md:text-sm opacity-100 md:opacity-60">
+                                    {value['email_akun']}
+                                </div>
+                                <div className="col-span-2 hidden md:flex items-center text-xs md:text-sm opacity-100">
+                                    {value['password_akun']}
+                                </div>
+                                <div className="col-span-2 hidden md:flex items-center text-xs md:text-sm opacity-100 md:opacity-60">
+                                    {value['role_akun']}
+                                </div>
+                                <div className="col-span-5 md:col-span-2 flex items-center text-xs md:text-sm justify-center gap-2">
+                                    <button type="button" onClick={() => document.getElementById(`info_akun_${index}`).showModal()} className="w-6 h-6 rounded bg-blue-500 hover:bg-blue-400 focus:bg-blue-600 md:hidden flex items-center justify-center text-white">
+                                        <FontAwesomeIcon icon={faSearch} className="w-3 h-3 text-inherit" />
+                                    </button>
+                                    <dialog id={`info_akun_${index}`} className="modal">
+                                        <div className="modal-box bg-white dark:bg-zinc-800">
+                                            <form method="dialog">
+                                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                            </form>
+                                            <h3 className="font-bold text-lg">Info Akun</h3>
+                                            <hr className="my-2 opacity-0" />
+                                            <div className="space-y-2">
+                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                                    <p className="opacity-70 w-full md:w-2/5">
+                                                        Email
+                                                    </p>
+                                                    <input disabled type="text" className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Email" />
+                                                </div>
+                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                                    <p className="opacity-70 w-full md:w-2/5">
+                                                        Password
+                                                    </p>
+                                                    <input disabled type="text" className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Password" />
+                                                </div>
+                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                                    <p className="opacity-70 w-full md:w-2/5">
+                                                        Nama
+                                                    </p>
+                                                    <input disabled type="text" className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Nama" />
+                                                </div>
+                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                                    <p className="opacity-70 w-full md:w-2/5">
+                                                        Role
+                                                    </p>
+                                                    <select disabled className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700 cursor-pointer">
+                                                        <option value="Piket">Piket</option>
+                                                        <option value="Admin">Admin</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </dialog>
-                                <button type="button" onClick={() => document.getElementById(`ubah_akun_${index}`).showModal()} className="w-6 h-6 rounded bg-amber-500 hover:bg-amber-400 focus:bg-amber-600 flex items-center justify-center text-white">
-                                    <FontAwesomeIcon icon={faEdit} className="w-3 h-3 text-inherit" />
-                                </button>
-                                <dialog id={`ubah_akun_${index}`} className="modal">
-                                    <div className="modal-box bg-white dark:bg-zinc-800">
-                                        <form method="dialog">
-                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                        </form>
-                                        <h3 className="font-bold text-lg">Ubah Akun</h3>
-                                        <hr className="my-2 opacity-0" />
-                                        <form onSubmit={e => submitUbahAkun(e, `ubah_akun_${index}`, value['id_akun'])} className="space-y-2">
-                                            <div className="flex flex-col md:flex-row md:items-center gap-1">
-                                                <p className="opacity-70 w-full md:w-2/5">
-                                                    Email
-                                                </p>
-                                                <input type="text" defaultValue={value['email_akun']} required className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Email" />
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center gap-1">
-                                                <p className="opacity-70 w-full md:w-2/5">
-                                                    Password
-                                                </p>
-                                                <input type="text" required defaultValue={value['password_akun']} className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Password" />
-                                            </div>
-                                            <div className="flex flex-col md:flex-row md:items-center gap-1">
-                                                <p className="opacity-70 w-full md:w-2/5">
-                                                    Role
-                                                </p>
-                                                <select required defaultValue={value['role_akun']} className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700 cursor-pointer">
-                                                    <option value="Piket">Piket</option>
-                                                    <option value="Admin">Admin</option>
-                                                </select>
-                                            </div>
-                                            <div className="flex items-center gap-5">
-                                                <button type="submit" className="px-3 py-2 rounded-full flex items-center justify-center gap-2 bg-green-500 dark:bg-green-500/10 hover:bg-green-400 dark:hover:bg-green-500/20 text-white dark:text-green-500 font-medium">
-                                                    <FontAwesomeIcon icon={faSave} className="w-3 h-3 text-inherit" />
-                                                    Simpan
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </dialog>
-                                <button type="button" onClick={() => handleDeleteAkun(value['id_akun'])} className="w-6 h-6 rounded bg-red-500 hover:bg-red-400 focus:bg-red-600 flex items-center justify-center text-white">
-                                    <FontAwesomeIcon icon={faTrash} className="w-3 h-3 text-inherit" />
-                                </button>
+                                    </dialog>
+                                    <button type="button" onClick={() => document.getElementById(`ubah_akun_${index}`).showModal()} className="w-6 h-6 rounded bg-amber-500 hover:bg-amber-400 focus:bg-amber-600 flex items-center justify-center text-white">
+                                        <FontAwesomeIcon icon={faEdit} className="w-3 h-3 text-inherit" />
+                                    </button>
+                                    <dialog id={`ubah_akun_${index}`} className="modal">
+                                        <div className="modal-box bg-white dark:bg-zinc-800">
+                                            <form method="dialog">
+                                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                            </form>
+                                            <h3 className="font-bold text-lg">Ubah Akun</h3>
+                                            <hr className="my-2 opacity-0" />
+                                            <form onSubmit={e => submitUbahAkun(e, `ubah_akun_${index}`, value['id_akun'])} className="space-y-2">
+                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                                    <p className="opacity-70 w-full md:w-2/5">
+                                                        Email
+                                                    </p>
+                                                    <input type="text" defaultValue={value['email_akun']} required className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Email" />
+                                                </div>
+                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                                    <p className="opacity-70 w-full md:w-2/5">
+                                                        Password
+                                                    </p>
+                                                    <input type="text" required defaultValue={value['password_akun']} className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Password" />
+                                                </div>
+                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
+                                                    <p className="opacity-70 w-full md:w-2/5">
+                                                        Role
+                                                    </p>
+                                                    <select required defaultValue={value['role_akun']} className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700 cursor-pointer">
+                                                        <option value="Piket">Piket</option>
+                                                        <option value="Admin">Admin</option>
+                                                    </select>
+                                                </div>
+                                                <div className="flex items-center gap-5">
+                                                    <button type="submit" className="px-3 py-2 rounded-full flex items-center justify-center gap-2 bg-green-500 dark:bg-green-500/10 hover:bg-green-400 dark:hover:bg-green-500/20 text-white dark:text-green-500 font-medium">
+                                                        <FontAwesomeIcon icon={faSave} className="w-3 h-3 text-inherit" />
+                                                        Simpan
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </dialog>
+                                    <button type="button" onClick={() => handleDeleteAkun(value['id_akun'])} className="w-6 h-6 rounded bg-red-500 hover:bg-red-400 focus:bg-red-600 flex items-center justify-center text-white">
+                                        <FontAwesomeIcon icon={faTrash} className="w-3 h-3 text-inherit" />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
                 <div className="flex justify-between px-3 py-4 flex-col md:flex-row gap-1">
                     <div className="flex items-center gap-5 justify-between md:justify-start">
                         <p className="text-xs md:text-lg">

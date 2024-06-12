@@ -65,56 +65,64 @@ export default function RiwayatPage() {
                     </div>
                 </div>
             </div>
-            <div className="py-3 relative overflow-auto w-full max-h-[500px] text-xs dark:text-white text-zinc-700">
-                {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
-                    <div key={index} className="grid grid-cols-12 px-4 py-3">
-                        <div className="hidden md:flex items-center col-span-2 ">
-                            <div className="flex items-center gap-3 w-fit px-3 py-2 rounded-full bg-zinc-100 dark:bg-zinc-800">
-                                <FontAwesomeIcon icon={faCalendar} className="w-3 h-3 text-inherit" />
-                                {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}
+            {loadingFetch !== 'fetched' && (
+                <div className="w-full py-5 flex justify-center items-center gap-3 text-zinc-500">
+                    <div className="loading loading-spinner loading-md"></div>
+                    <p>Sedang mendapatkan data</p>
+                </div>
+            )}
+            {loadingFetch === 'fetched' && (
+                <div className="py-3 relative overflow-auto w-full max-h-[500px] text-xs dark:text-white text-zinc-700">
+                    {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
+                        <div key={index} className="grid grid-cols-12 px-4 py-3">
+                            <div className="hidden md:flex items-center col-span-2 ">
+                                <div className="flex items-center gap-3 w-fit px-3 py-2 rounded-full bg-zinc-100 dark:bg-zinc-800">
+                                    <FontAwesomeIcon icon={faCalendar} className="w-3 h-3 text-inherit" />
+                                    {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}
+                                </div>
+                            </div>
+                            <div className="hidden md:flex items-center col-span-2 ">
+                                <div className="flex items-center gap-3 w-fit px-3 py-2 rounded-full bg-zinc-100 dark:bg-zinc-800">
+                                    <FontAwesomeIcon icon={faClock} className="w-3 h-3 text-inherit" />
+                                    {value['waktu']}
+                                </div>
+                            </div>
+                            <div className="flex items-center col-span-7 md:col-span-2 ">
+                            {value['nama_akun']}
+                            </div>
+                            <div className="hidden md:flex items-center col-span-2 ">
+                                {value['aksi'] === 'Tambah' && (
+                                    <div className="flex items-center gap-3 bg-green-500 text-white dark:bg-green-500/10 dark:text-green-400 w-fit px-3 py-2 rounded-full">
+                                        <FontAwesomeIcon icon={faPlus} className="w-3 h-3 text-inherit" />
+                                        {value['aksi']}
+                                    </div>
+                                )}
+                                {value['aksi'] === 'Ubah' && (
+                                    <div className="flex items-center gap-3 bg-amber-500 text-white dark:bg-amber-500/10 dark:text-amber-400 w-fit px-3 py-2 rounded-full">
+                                        <FontAwesomeIcon icon={faEdit} className="w-3 h-3 text-inherit" />
+                                        {value['aksi']}
+                                    </div>
+                                )}
+                                {value['aksi'] === 'Hapus' && (
+                                    <div className="flex items-center gap-3 bg-red-500 text-white dark:bg-red-500/10 dark:text-red-400 w-fit px-3 py-2 rounded-full">
+                                        <FontAwesomeIcon icon={faTrash} className="w-3 h-3 text-inherit" />
+                                        {value['aksi']}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="hidden md:flex items-center col-span-2 ">
+                            {value['keterangan']}
+                            </div>
+                            <div className="flex items-center col-span-5 md:col-span-2 justify-center">
+                                <button type="button" className="px-3 py-2 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center gap-3 w-fit">
+                                    <FontAwesomeIcon icon={faSearch} className="w-3 h-3 text-inherit" />
+                                    Lihat Data
+                                </button>
                             </div>
                         </div>
-                        <div className="hidden md:flex items-center col-span-2 ">
-                            <div className="flex items-center gap-3 w-fit px-3 py-2 rounded-full bg-zinc-100 dark:bg-zinc-800">
-                                <FontAwesomeIcon icon={faClock} className="w-3 h-3 text-inherit" />
-                                {value['waktu']}
-                            </div>
-                        </div>
-                        <div className="flex items-center col-span-7 md:col-span-2 ">
-                        {value['nama_akun']}
-                        </div>
-                        <div className="hidden md:flex items-center col-span-2 ">
-                            {value['aksi'] === 'Tambah' && (
-                                <div className="flex items-center gap-3 bg-green-500 text-white dark:bg-green-500/10 dark:text-green-400 w-fit px-3 py-2 rounded-full">
-                                    <FontAwesomeIcon icon={faPlus} className="w-3 h-3 text-inherit" />
-                                    {value['aksi']}
-                                </div>
-                            )}
-                            {value['aksi'] === 'Ubah' && (
-                                <div className="flex items-center gap-3 bg-amber-500 text-white dark:bg-amber-500/10 dark:text-amber-400 w-fit px-3 py-2 rounded-full">
-                                    <FontAwesomeIcon icon={faEdit} className="w-3 h-3 text-inherit" />
-                                    {value['aksi']}
-                                </div>
-                            )}
-                            {value['aksi'] === 'Hapus' && (
-                                <div className="flex items-center gap-3 bg-red-500 text-white dark:bg-red-500/10 dark:text-red-400 w-fit px-3 py-2 rounded-full">
-                                    <FontAwesomeIcon icon={faTrash} className="w-3 h-3 text-inherit" />
-                                    {value['aksi']}
-                                </div>
-                            )}
-                        </div>
-                        <div className="hidden md:flex items-center col-span-2 ">
-                        {value['keterangan']}
-                        </div>
-                        <div className="flex items-center col-span-5 md:col-span-2 justify-center">
-                            <button type="button" className="px-3 py-2 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center gap-3 w-fit">
-                                <FontAwesomeIcon icon={faSearch} className="w-3 h-3 text-inherit" />
-                                Lihat Data
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
             <div className="flex justify-between px-3 py-4 flex-col md:flex-row gap-1 dark:text-white">
                 
                 <div className="flex items-center gap-6 justify-between md:justify-start">
