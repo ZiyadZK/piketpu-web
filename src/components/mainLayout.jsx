@@ -31,9 +31,13 @@ export default function MainLayoutPage({children}) {
     const [theme, setTheme] = useState('')
 
     const getLoggedAkun = async () => {
-        const userdata = await getLoggedUserdata()
-        
-        setLoggedAkun(userdata)
+        const response = await getLoggedUserdata()
+        console.log(response)
+        if(response.success) {
+            setLoggedAkun(response.data)
+        }else{
+            router.push('/login')
+        }
     }
 
     const getFilteredPath = () => {
@@ -146,7 +150,7 @@ export default function MainLayoutPage({children}) {
                                 </span>
                                 <span className={`w-2 h-2 rounded-full bg-blue-600/50 animate-ping ${filteredPath && filteredPath.url === '/' ? 'block' : 'hidden'} `}></span>
                             </a>
-                            {loggedAkun && navLinkMasterData.map((nav, index) =>  (
+                            {loggedAkun && navLinkMasterData.map((nav, index) => nav.role.includes(loggedAkun.role_akun) &&  (
                                 <a key={index} href={nav.url} className={`flex items-center text-sm justify-between tracking-tighter ${filteredPath && filteredPath.url.startsWith(nav.url) ? 'bg-white dark:bg-zinc-800/50 shadow-lg text-zinc-800 dark:text-zinc-400' : 'hover:bg-zinc-200 dark:hover:bg-zinc-800/50 text-zinc-400 dark:text-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-400 group'}  font-medium rounded-lg px-3 py-2`}>
                                     <span className="flex items-center gap-6">
                                         <FontAwesomeIcon icon={nav.icon} className={`w-4 h-4  ${filteredPath && filteredPath.url.startsWith(nav.url) ? 'text-blue-600' : 'text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-400'} `} />
@@ -176,6 +180,7 @@ export default function MainLayoutPage({children}) {
                     </h1>
                     <hr className="my-1 opacity-0" />
                     {children}
+                    <hr className="my-5 opacity-0" />
                 </div>
             </div>
         </div>

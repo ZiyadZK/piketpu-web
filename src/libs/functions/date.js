@@ -1,5 +1,7 @@
 'use client'
 
+
+
 export const date_getDay = (date) => {
     let delimiter = null;
     let day;
@@ -103,37 +105,34 @@ export const date_getYear = (date) => {
 }
 
 
-export const date_getTime = (type, timezone = 'Asia/Jakarta') => {
+export const date_getTime = (type) => {
     const currentDate = new Date();
-    let time;
-
-    // Create a new date string in the specified time zone
     const options = {
+        timeZone: 'Asia/Jakarta',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
-        timeZone: timezone,
-        hour12: false,
+        hour12: false
     };
 
-    const timeString = currentDate.toLocaleString('en-GB', options);
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(currentDate);
 
-    // Extract hour and minutes from the time string
-    const [hour, minute] = timeString.split(':');
-
+    let time;
     if (type === 'hour') {
-        time = hour; // Ensures 2-digit format from toLocaleString
+        time = parts.find(part => part.type === 'hour').value;
     } else if (type === 'minutes') {
-        time = minute; // Ensures 2-digit format from toLocaleString
+        time = parts.find(part => part.type === 'minute').value;
     } else {
-        return 'Invalid type. Use "hour" or "minutes".';
+        const hour = parts.find(part => part.type === 'hour').value;
+        const minute = parts.find(part => part.type === 'minute').value;
+        time = `${hour}:${minute}`;
     }
 
     return time;
 }
 
 export const date_toFormat = (date) => {
-    const [year, month, day] = date.split('-')
+    const [year, day, month] = date.split('-')
 
     return `${day}/${month}/${year}`
 }
@@ -141,6 +140,6 @@ export const date_toFormat = (date) => {
 export const date_toInputHtml = (date) => {
     const [day, month, year] = date.split('/')
 
-    return `${year}-${month}-${day}`
+    return `${year}-${day}-${month}`
 }
 
