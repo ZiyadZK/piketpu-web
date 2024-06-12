@@ -106,7 +106,7 @@ export default function SuratPage() {
                         const pdf = new jsPDF({
                             orientation: 'p',
                             unit: 'mm',
-                            format: [297, 160],
+                            format: [260, 160],
                             compress: true,
                             precision: 2
                         });
@@ -919,7 +919,7 @@ export default function SuratPage() {
                 <hr className="my-3 opacity-0" />
                 <div className="w-full flex gap-5 flex-wrap">
                     {printedData.map((value, index) => (
-                        <div ref={componentPDF.current[index]} key={index} className="w-[219.21px] h-[400.25px] bg-white text-xs dark:text-zinc-700 pr-10" style={{
+                        <div ref={componentPDF.current[index]} key={index} className="w-[219.21px] h-fit bg-white text-xs dark:text-zinc-700 pr-10" style={{
                             fontSize: '10px'
                         }}>
                             <div className="flex w-full items-center">
