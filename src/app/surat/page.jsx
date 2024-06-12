@@ -43,6 +43,7 @@ export default function SuratPage() {
         kelas: [], jurusan: [], rombel: []
     })
     const [renderProcess, setRenderProcess] = useState('')
+    const [renderSingleProcess, setRenderSingleProcess] = useState('')
 
     const [searchSiswa, setSearchSiswa] = useState('')
     const [searchPiket, setSearchPiket] = useState('')
@@ -146,6 +147,7 @@ export default function SuratPage() {
                         document.getElementById(modal).close();
                         setSelectedSiswa([]);
                         setSelectedData([]);
+                        setPrintedData([])
                         await getData();
                         Swal.fire({
                             title: 'Sukses',
@@ -414,8 +416,66 @@ export default function SuratPage() {
         })
     }
 
-    const printPrintedData = () => {
-        console.log(componentPDF)
+    const printPrintedData = async (id_surat_izin) => {
+        setRenderSingleProcess('loading')
+
+        const dataSurat = data.filter(value => value['id_surat_izin'] === id_surat_izin)
+        
+        setPrintedData(dataSurat)
+
+        if (componentPDF.current.length !== dataSurat.length) {
+            componentPDF.current = dataSurat
+            .map((_, i) => componentPDF.current[i] || createRef());
+        }
+
+        setTimeout(async () => {
+            setRenderSingleProcess('done')
+            const pdf = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: [260, 160],
+                compress: true,
+                precision: 2
+            });
+
+            for (let i = 0; i < componentPDF.current.length; i++) {
+                const content = componentPDF.current[i].current;
+                if (!content) continue;
+
+                const canvas = await html2canvas(content, { scale: 3 });
+                const imgData = canvas.toDataURL('image/jpeg', 1);
+
+                const pdfW = pdf.internal.pageSize.getWidth();
+                const pdfH = pdf.internal.pageSize.getHeight();
+
+                const imgW = canvas.width;
+                const imgH = canvas.height;
+
+                // Calculate scaling factor to fit the image into the PDF page
+                const ratio = Math.min(pdfW / imgW, pdfH / imgH);
+
+                // Calculate the dimensions and position of the image to be centered on the PDF page
+                const imgWidth = imgW * ratio;
+                const imgHeight = imgH * ratio;
+                const imgX = (pdfW - imgWidth) / 2;
+                const imgY = (pdfH - imgHeight) / 2;
+
+                // Add the image to the PDF
+                pdf.addImage(imgData, 'JPEG', imgX, imgY, imgWidth, imgHeight);
+                if (i < componentPDF.current.length - 1) {
+                    pdf.addPage();
+                }
+            }
+
+            pdf.save(`Surat Piket - ${dataSurat[0]['nama_siswa']} - ${dataSurat[0]['kelas']} ${dataSurat[0]['jurusan']} ${dataSurat[0]['rombel']} - ${date_getDay(dataSurat[0]['tanggal'])} ${date_getMonth('string', dataSurat[0]['tanggal'])} ${date_getYear(dataSurat[0]['tanggal'])}`);
+            const pdfDataUri = pdf.output('datauristring');
+            const newTab = window.open();
+            newTab.document.write(`<iframe src="${pdfDataUri}" width="100%" height="100%"></iframe>`);
+
+            setSelectedSiswa([]);
+            setSelectedData([]);
+            setPrintedData([])
+        }, 1000)
     }
 
     useEffect(() => {
@@ -707,9 +767,16 @@ export default function SuratPage() {
                                 </a>
                             </div>
                             <div className="col-span-5 md:col-span-2 flex items-center justify-center md:gap-2 gap-1">
-                                <button type="button" onClick={() => printPrintedData()} className="w-6 h-6 rounded bg-cyan-600 hover:bg-cyan-500 focus:bg-cyan-700 text-white flex items-center justify-center">
-                                    <FontAwesomeIcon icon={faPrint} className="w-3 h-3 text-inherit" />
-                                </button>
+                                {renderSingleProcess !== 'loading' && (
+                                    <button type="button" onClick={() => printPrintedData(value['id_surat_izin'])} className="w-6 h-6 rounded bg-cyan-600 hover:bg-cyan-500 focus:bg-cyan-700 text-white flex items-center justify-center">
+                                        <FontAwesomeIcon icon={faPrint} className="w-3 h-3 text-inherit" />
+                                    </button>
+                                )}
+                                {renderSingleProcess === 'loading' && (
+                                    <div className="w-6 h-6 flex items-center justify-center">
+                                        <div className="loading loading-spinner loading-sm text-zinc-500"></div>
+                                    </div>
+                                )}
                                 <button type="button" onClick={() => document.getElementById(`info_modal_${index}`).showModal()} className="w-6 h-6 rounded bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 text-white flex md:hidden items-center justify-center">
                                     <FontAwesomeIcon icon={faFile} className="w-3 h-3 text-inherit" />
                                 </button>
