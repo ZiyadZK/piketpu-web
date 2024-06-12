@@ -32,6 +32,7 @@ export default function SuratPage() {
     const [dataPegawai, setDataPegawai] = useState([])
     const [filteredDataPegawai, setFilteredDataPegawai] = useState([])
     const [dataSiswa, setDataSiswa] = useState([])
+    const [fetchDataSiswa, setFetchDataSiswa] = useState('')
     const [filteredDataSiswa, setFilteredDataSiswa] = useState([])
     const [pagination, setPagination] = useState(1)
     const [totalList, setTotalList] = useState(10)
@@ -197,6 +198,7 @@ export default function SuratPage() {
             setDataSiswa(response.data)
             setFilteredDataSiswa(response.data)
         }
+        setFetchDataSiswa('fetched')
     }
 
     const getLoggedAkun = async () => {
@@ -573,25 +575,33 @@ export default function SuratPage() {
                             <input type="text" value={searchDataSiswa} onChange={e => setSearchDataSiswa(e.target.value)} className="w-full md:w-3/5 px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none" placeholder="Cari disini" />
                         </div>
                         <hr className="my-1 opacity-0" />
-                        <div className="space-y-2 relative overflow-auto w-full max-h-[300px]">
-                            {filteredDataSiswa.slice(0, 20).map((value, index) => (
-                                <button key={index} type="button" onClick={() => selectSiswa(value)} className={`w-full p-3 rounded-lg border text-start flex items-center justify-between ${!selectedSiswa.some(v => v['nis_siswa'] === value['nis']) ? 'hover:border-zinc-100/0 hover:bg-zinc-100 dark:border-zinc-500 dark:hover:bg-zinc-700' : ' dark:border-zinc-500 bg-zinc-100 dark:bg-zinc-700'} transition-all duration-150`}>
-                                    <div className="space-y-1 text-xs md:text-sm">
-                                        <p className="font-bold">
-                                            {value['nama_siswa']}
-                                        </p>
-                                        <div className="flex items-center gap-2 text-xs">
-                                            <p>{value['nis']}</p>
-                                            -
-                                            <p>{value['nisn']}</p>
+                        {fetchDataSiswa !== 'fetched' && (
+                            <div className="w-full flex justify-center items-center gap-3 opacity-50">
+                                <div className="loading loading-spinner loading-md"></div>
+                                <p>Sedang mendapatkan data</p>
+                            </div>
+                        )}
+                        {fetchDataSiswa === 'fetched' && (
+                            <div className="space-y-2 relative overflow-auto w-full max-h-[300px]">
+                                {filteredDataSiswa.slice(0, 20).map((value, index) => (
+                                    <button key={index} type="button" onClick={() => selectSiswa(value)} className={`w-full p-3 rounded-lg border text-start flex items-center justify-between ${!selectedSiswa.some(v => v['nis_siswa'] === value['nis']) ? 'hover:border-zinc-100/0 hover:bg-zinc-100 dark:border-zinc-500 dark:hover:bg-zinc-700' : ' dark:border-zinc-500 bg-zinc-100 dark:bg-zinc-700'} transition-all duration-150`}>
+                                        <div className="space-y-1 text-xs md:text-sm">
+                                            <p className="font-bold">
+                                                {value['nama_siswa']}
+                                            </p>
+                                            <div className="flex items-center gap-2 text-xs">
+                                                <p>{value['nis']}</p>
+                                                -
+                                                <p>{value['nisn']}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <p className="text-sm">
-                                        {value['kelas']} {value['rombel']} {value['no_rombel']}
-                                    </p>
-                                </button>
-                            ))}
-                        </div>
+                                        <p className="text-sm">
+                                            {value['kelas']} {value['rombel']} {value['no_rombel']}
+                                        </p>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                         <hr className="my-1 opacity-0" />
                         <div className="flex md:items-center flex-col md:flex-row gap-1">
                             <p className="w-full md:w-2/5 opacity-70">
