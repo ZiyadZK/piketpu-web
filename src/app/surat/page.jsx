@@ -64,8 +64,7 @@ export default function SuratPage() {
             tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
             waktu: `${date_getTime('hour')}:${date_getTime('minutes')}`,
             tipe: e.target[0].value,
-            alasan: e.target[1].value,
-            keterangan: e.target[2].value,
+            keterangan: e.target[1].value,
             id_guru_piket: loggedAkun['id_guru_piket_akun'],
             nama_guru_piket: loggedAkun['nama_akun']
           };
@@ -235,8 +234,7 @@ export default function SuratPage() {
             tanggal: e.target[0].value.split('T')[0],
             waktu: e.target[0].value.split('T')[1],
             tipe: e.target[1].value,
-            alasan: e.target[2].value,
-            keterangan: e.target[3].value
+            keterangan: e.target[2].value
         }
 
         document.getElementById(modal).close()
@@ -661,13 +659,6 @@ export default function SuratPage() {
                             <hr className="my-1 opacity-0" />
                             <div className="flex md:items-center flex-col md:flex-row gap-1">
                                 <p className="w-full md:w-2/5 opacity-70">
-                                    Alasan
-                                </p>
-                                <input type="text" required className="w-full md:w-3/5 px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none" placeholder="Masukkan alasan disini" />
-                            </div>
-                            <hr className="my-1 opacity-0" />
-                            <div className="flex md:items-center flex-col md:flex-row gap-1">
-                                <p className="w-full md:w-2/5 opacity-70">
                                     Keterangan
                                 </p>
                                 <input type="text" required className="w-full md:w-3/5 px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none" placeholder="Masukkan keterangan disini" />
@@ -699,7 +690,7 @@ export default function SuratPage() {
                         Kelas
                     </div>
                     <div className="col-span-2 hidden md:flex items-center gap-3 opacity-60">
-                        Tipe - Alasan
+                        Tipe
                     </div>
                     <div className="col-span-2 hidden md:flex items-center gap-3 opacity-60">
                         Keterangan
@@ -760,9 +751,6 @@ export default function SuratPage() {
                                                 Meninggalkan Pelajaran
                                             </p>
                                         )}
-                                        <p>
-                                            {value['alasan']}
-                                        </p>
                                     </div>
                                 </div>
                                 <div className="col-span-2 hidden md:flex items-center gap-3 opacity-60 text-xs md:text-sm">
@@ -830,14 +818,6 @@ export default function SuratPage() {
                                                             Meninggalkan Pelajaran
                                                         </p>
                                                     )}
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <p className="text-xs opacity-50">
-                                                        Alasan
-                                                    </p>
-                                                    <p className="text-sm font-medium">
-                                                        {value['alasan']}
-                                                    </p>
                                                 </div>
                                                 <div className="flex flex-col gap-1">
                                                     <p className="text-xs opacity-50">
@@ -918,14 +898,6 @@ export default function SuratPage() {
                                                             <option value="Meninggalkan Pelajaran">Meninggalkan Pelajaran</option>
                                                             <option value="Meninggalkan Pelajaran Sementara">Meninggalkan Pelajaran Sementara</option>
                                                         </select>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col md:flex-row md:items-center">
-                                                    <p className="w-full md:w-2/5 opacity-50 text-xs md:text-sm">
-                                                        Alasan
-                                                    </p>
-                                                    <div className="w-full md:w-3/5 text-xs md:text-sm flex items-center gap-1">
-                                                        <input required defaultValue={value['alasan']} type="text" className="w-full px-3 py-1 rounded border dark:bg-zinc-800 dark:border-zinc-700" placeholder="Masukkan Alasan" />
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col md:flex-row md:items-center">
