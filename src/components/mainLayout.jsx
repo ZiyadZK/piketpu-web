@@ -48,10 +48,10 @@ export default function MainLayoutPage({children}) {
 
     const getTheme = () => {
         const themeData = localStorage.getItem('theme') || 'light'
-        if(themeData === 'dark') {
-            document.body.classList.add('dark')
+        if(themeData === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark')
         }else{
-            document.body.classList.remove('dark')
+            document.documentElement.classList.remove('dark')
         }
 
         setTheme(themeData)
@@ -104,13 +104,13 @@ export default function MainLayoutPage({children}) {
         <div className="w-full h-screen bg-white dark:bg-zinc-900">
             {showSidebar && <SidebarSection setShowSidebar={setShowSidebar} />}
             <nav className="fixed top-0 left-0 px-5 py-3 border-b border-zinc-300 dark:border-zinc-800 shadow-lg w-full flex items-center z-50 bg-white dark:bg-zinc-900 gap-5 md:gap-0">
-                <div className="w-2/12">    
+                <div className="md:w-3/12 lg:w-2/12">    
                     <div className="flex items-center gap-5">
                         <Image src={'/logo-sekolah-2.png'} width={15} height={15} alt="Logo Sekolah" className="w-5 h-5 md:w-fit md:h-fit" />
                         <h1 className={`${jakarta.className} font-bold text-gray-800 dark:text-zinc-200 text-xs md:text-sm`}>SI<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500">KAP</span></h1>
                     </div>
                 </div>
-                <div className="w-10/12 flex justify-between items-center">
+                <div className="md:w-9/12 lg:w-10/12 flex justify-between items-center">
                     <div className="flex items-center gap-3">   
                         <button type="button" onClick={() => setShowSidebar(state => !state)} className="md:hidden flex items-center justify-center swap swap-rotate  text-blue-600 btn btn-sm bg-transparent border-0">
                             <FontAwesomeIcon icon={showSidebar ? faXmark : faBars} className="w-3 h-3 text-inherit" />
@@ -139,7 +139,7 @@ export default function MainLayoutPage({children}) {
                 </div>
             </nav>
             <div className={`flex h-full ${jakarta.className}`}>
-                <div className="hidden md:block relative overflow-auto w-2/12 border-r border-zinc-300 dark:border-zinc-800 h-full text-zinc-800 pt-16 bg-zinc-50 dark:bg-zinc-950">
+                <div className="hidden md:block relative overflow-auto md:w-3/12 lg:w-2/12 border-r border-zinc-300 dark:border-zinc-800 h-full text-zinc-800 pt-16 bg-zinc-50 dark:bg-zinc-950">
                     <hr className="my-2 opacity-0" />
                     <div className="px-5">
                         <div className="space-y-2">
@@ -160,19 +160,9 @@ export default function MainLayoutPage({children}) {
                                 </a>
                             ))}
                         </div>
-                        <hr className="my-5 dark:opacity-30" />
-                        <div className="flex justify-between items-center">
-                            <p className="text-sm opacity-60 dark:opacity-100 dark:text-zinc-600">
-                                Ubah Tema
-                            </p>
-                            <button type="button" onClick={() => toggleTheme()} className="flex items-center gap-2 p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700">
-                                {theme === 'dark' ? 'Terang' : 'Gelap'}
-                                <FontAwesomeIcon icon={theme === 'dark' ? faSun : faMoon} className="w-3 h-3 text-inherit" />
-                            </button>
-                        </div>
                     </div>
                 </div>
-                <div className={`${jakarta.className} w-full md:w-10/12 px-5 pt-16 h-full text-zinc-800 relative overflow-auto`}>
+                <div className={`${jakarta.className} w-full md:w-9/12 lg:w-10/12 px-5 pt-16 h-full text-zinc-800 relative overflow-auto`}>
                     <hr className="block md:hidden my-1 opacity-0" />
                     <h1 className={`${jakarta.className} text-blue-600 md:hidden flex font-medium text-xl tracking-wide w-fit  items-center gap-3`}>
                         <FontAwesomeIcon icon={ filteredPath ? filteredPath.icon : faSpinner} className={`w-4 h-4 text-inherit ${!filteredPath ? 'animate-spin' : ''}`} />

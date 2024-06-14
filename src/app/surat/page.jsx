@@ -496,11 +496,11 @@ export default function SuratPage() {
             <Toaster />
             <div className="mt-5 dark:text-zinc-200 text-zinc-700">
                 <div className="space-y-2 w-full">
-                    <div className="flex flex-col md:flex-row gap-1 md:items-center">
-                        <p className="w-full md:w-1/6 opacity-70">
+                    <div className="flex flex-col lg:flex-row gap-1 lg:items-center">
+                        <p className="w-full lg:w-1/6 opacity-70">
                             Pilih Kelas
                         </p>
-                        <div className="w-full md:w-5/6 flex items-center gap-4">
+                        <div className="w-full lg:w-5/6 flex items-center gap-4">
                         {kelasList.map((value, index) => (
                             <button key={index} type="button" onClick={() => handleFilterData('kelas', value)} className={`px-3 py-2 rounded ${filterData['kelas'].includes(value) ? 'dark:text-zinc-white dark:bg-zinc-800 bg-zinc-100' : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-white'}  `}>
                                 {value}
@@ -508,11 +508,11 @@ export default function SuratPage() {
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-col md:flex-row gap-1 md:items-center">
-                        <p className="w-full md:w-1/6 opacity-70">
+                    <div className="flex flex-col lg:flex-row gap-1 lg:items-center">
+                        <p className="w-full lg:w-1/6 opacity-70">
                             Pilih Jurusan
                         </p>
-                        <div className="w-full md:w-5/6 flex items-center gap-4">
+                        <div className="w-full lg:w-5/6 flex items-center gap-4">
                         {jurusanList.map((value, index) => (
                             <button key={index} type="button" onClick={() => handleFilterData('jurusan', value)} className={`px-3 py-2 rounded ${filterData['jurusan'].includes(value) ? 'dark:text-zinc-white dark:bg-zinc-800 bg-zinc-100' : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-white'}  `}>
                                 {value}
@@ -520,11 +520,11 @@ export default function SuratPage() {
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-col md:flex-row gap-1 md:items-center">
-                        <p className="w-full md:w-1/6 opacity-70">
+                    <div className="flex flex-col lg:flex-row gap-1 lg:items-center">
+                        <p className="w-full lg:w-1/6 opacity-70">
                             Pilih Rombel
                         </p>
-                        <div className="w-full md:w-5/6 flex items-center gap-4">
+                        <div className="w-full lg:w-5/6 flex items-center gap-4">
                         {rombelList.map((value, index) => (
                             <button key={index} type="button" onClick={() => handleFilterData('rombel', value)} className={`px-3 py-2 rounded ${filterData['rombel'].includes(value) ? 'dark:text-zinc-white dark:bg-zinc-800 bg-zinc-100' : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-white'}  `}>
                                 {value}
@@ -532,30 +532,30 @@ export default function SuratPage() {
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-col md:flex-row gap-1 md:items-center">
-                        <p className="w-full md:w-1/6 opacity-70">
+                    <div className="flex flex-col lg:flex-row gap-1 lg:items-center">
+                        <p className="w-full lg:w-1/6 opacity-70">
                             Cari Siswa
                         </p>
-                        <div className="w-full md:w-5/6 flex items-center gap-4">
-                            <input type="text" value={searchSiswa} onChange={e => setSearchSiswa(e.target.value)} className="w-full md:w-1/2 px-3 py-2 rounded border dark:bg-zinc-800 dark:border-zinc-700 dark:text-white" placeholder="NIS / Nama / NISN / NIK" />
+                        <div className="w-full lg:w-5/6 flex items-center gap-4">
+                            <input type="text" value={searchSiswa} onChange={e => setSearchSiswa(e.target.value)} className="w-full lg:w-1/2 px-3 py-2 rounded border dark:bg-zinc-800 dark:border-zinc-700 dark:text-white" placeholder="NIS / Nama / NISN / NIK" />
                         </div>
                     </div>
-                    <div className="flex flex-col md:flex-row gap-1 md:items-center">
-                        <p className="w-full md:w-1/6 opacity-70">
+                    <div className="flex flex-col lg:flex-row gap-1 lg:items-center">
+                        <p className="w-full lg:w-1/6 opacity-70">
                             Cari Piket
                         </p>
-                        <div className="w-full md:w-5/6 flex items-center gap-4">
-                            <input type="text" value={searchPiket} onChange={e => setSearchPiket(e.target.value)} className="w-full md:w-1/2 px-3 py-2 rounded border dark:bg-zinc-800 dark:border-zinc-700 dark:text-white" placeholder="NIK / Nama / NIP" />
+                        <div className="w-full lg:w-5/6 flex items-center gap-4">
+                            <input type="text" value={searchPiket} onChange={e => setSearchPiket(e.target.value)} className="w-full lg:w-1/2 px-3 py-2 rounded border dark:bg-zinc-800 dark:border-zinc-700 dark:text-white" placeholder="NIK / Nama / NIP" />
                         </div>
                     </div>
                 </div>
                 <hr className="my-3 opacity-0" />
-                <button type="button" onClick={() => document.getElementById('modal_tambah_surat').showModal()} className="w-full md:w-fit px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 dark:bg-zinc-950 dark:hover:bg-black text-white flex items-center justify-center gap-3">
+                <button type="button" onClick={() => document.getElementById('modal_tambah_surat').showModal()} className="w-full lg:w-fit px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 dark:bg-zinc-950 dark:hover:bg-black dark:focus:bg-zinc-800 text-white flex items-center justify-center gap-3">
                     <FontAwesomeIcon icon={faPlus} className="w-4 h-4 text-inherit" />
                     Buat Surat
                 </button>
                 <dialog id="modal_tambah_surat" className="modal">
-                    <div className="modal-box md:w-full md:max-w-[600px] dark:bg-zinc-800">
+                    <div className="modal-box lg:w-full lg:max-w-[600px] dark:bg-zinc-800">
                         {renderProcess !== 'loading' && (
                             <form method="dialog">
                                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
@@ -692,23 +692,23 @@ export default function SuratPage() {
                 </dialog>
                 <hr className="my-3 opacity-0" />
                 <div className="grid grid-cols-12 border rounded-xl dark:border-zinc-700 dark:bg-zinc-800 dark:text-white *:px-3 *:py-3">
-                    <div className="col-span-7 md:col-span-3 flex items-center gap-3">
+                    <div className="col-span-7 lg:col-span-3 flex items-center gap-3">
                         <input type="checkbox" checked={selectAllData} onChange={() => handleSelectAllData()} />
                         <p className="opacity-60">Nama Siswa</p>
                     </div>
-                    <div className="hidden md:flex items-center gap-3 opacity-60">
+                    <div className="hidden lg:flex items-center gap-3 opacity-60">
                         Kelas
                     </div>
-                    <div className="col-span-2 hidden md:flex items-center gap-3 opacity-60">
+                    <div className="col-span-2 hidden lg:flex items-center gap-3 opacity-60">
                         Tipe
                     </div>
-                    <div className="col-span-2 hidden md:flex items-center gap-3 opacity-60">
+                    <div className="col-span-2 hidden lg:flex items-center gap-3 opacity-60">
                         Keterangan
                     </div>
-                    <div className="col-span-2 hidden md:flex items-center gap-3 opacity-60">
+                    <div className="col-span-2 hidden lg:flex items-center gap-3 opacity-60">
                         Guru Piket
                     </div>
-                    <div className="col-span-5 md:col-span-2 flex items-center justify-center">
+                    <div className="col-span-5 lg:col-span-2 flex items-center justify-center">
                         <FontAwesomeIcon icon={faEllipsisH} className="w-4 h-4 text-inherit" />
                     </div>
                 </div>
@@ -722,10 +722,10 @@ export default function SuratPage() {
                     <div className="relative w-full overflow-auto max-h-[300px] py-2">
                         {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
                             <div key={index} className="grid grid-cols-12 hover:bg-zinc-50/50 dark:hover:bg-zinc-950 w-full *:px-3 *:py-4 rounded">
-                                <div className="col-span-7 md:col-span-3 flex gap-3">
+                                <div className="col-span-7 lg:col-span-3 flex gap-3">
                                     <input type="checkbox" checked={selectedData.includes(value['id_surat_izin'])} onChange={() => selectData(value['id_surat_izin'])} />
                                     <div className="">
-                                        <div className="hidden md:flex items-center gap-2 font-medium">
+                                        <div className="hidden lg:flex items-center gap-2 font-medium">
                                             <div className="flex items-center gap-2 text-xs rounded-full px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-500">
                                                 <FontAwesomeIcon icon={faCalendar} className="w-3 h-3 text-inherit" />
                                                 {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}
@@ -735,16 +735,16 @@ export default function SuratPage() {
                                                 {value['waktu']}
                                             </div>
                                         </div>
-                                        <hr className=" my-1 opacity-0 hidden md:block" />
-                                        <a href={`https://simak.smkpunegerijabar.sch.id/data/siswa/nis/${value['nis_siswa']}`} target="_blank" className="hover:underline text-xs md:text-sm">
+                                        <hr className=" my-1 opacity-0 hidden lg:block" />
+                                        <a href={`https://simak.smkpunegerijabar.sch.id/data/siswa/nis/${value['nis_siswa']}`} target="_blank" className="hover:underline text-xs lg:text-sm">
                                             {value['nama_siswa']}
                                         </a>
                                     </div>
                                 </div>
-                                <div className="hidden md:flex items-center gap-3 opacity-60 text-xs md:text-sm">
+                                <div className="hidden lg:flex items-center gap-3 opacity-60 text-xs lg:text-sm">
                                     {value['kelas']} {value['jurusan']} {value['rombel']}
                                 </div> 
-                                <div className="col-span-2 hidden md:flex items-center gap-3 text-xs md:text-sm">
+                                <div className="col-span-2 hidden lg:flex items-center gap-3 text-xs lg:text-sm">
                                     <div className="space-y-1">
                                         {value['tipe'] === 'Mengikuti Pelajaran' && (
                                             <p className="text-xs px-2 py-1 rounded-full bg-green-500 dark:bg-green-500/10 dark:text-green-500 text-white font-medium">
@@ -763,15 +763,15 @@ export default function SuratPage() {
                                         )}
                                     </div>
                                 </div>
-                                <div className="col-span-2 hidden md:flex items-center gap-3 opacity-60 text-xs md:text-sm">
+                                <div className="col-span-2 hidden lg:flex items-center gap-3 opacity-60 text-xs lg:text-sm">
                                     {value['keterangan']}
                                 </div>
-                                <div className="col-span-2 hidden md:flex items-center gap-3 text-xs md:text-sm">
+                                <div className="col-span-2 hidden lg:flex items-center gap-3 text-xs lg:text-sm">
                                     <a href={`https://simak.smkpunegerijabar.sch.id/data/pegawai/${value['id_guru_piket']}`} className="hover:underline">
                                         {value['nama_guru_piket']}
                                     </a>
                                 </div>
-                                <div className="col-span-5 md:col-span-2 flex items-center justify-center md:gap-2 gap-1">
+                                <div className="col-span-5 lg:col-span-2 flex items-center justify-center lg:gap-2 gap-1">
                                     {renderSingleProcess !== 'loading' && (
                                         <button type="button" onClick={() => printPrintedData(value['id_surat_izin'])} className="w-6 h-6 rounded bg-cyan-600 hover:bg-cyan-500 focus:bg-cyan-700 text-white flex items-center justify-center">
                                             <FontAwesomeIcon icon={faPrint} className="w-3 h-3 text-inherit" />
@@ -782,10 +782,10 @@ export default function SuratPage() {
                                             <div className="loading loading-spinner loading-sm text-zinc-500"></div>
                                         </div>
                                     )}
-                                    <button type="button" onClick={() => document.getElementById(`info_modal_${index}`).showModal()} className="w-6 h-6 rounded bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 text-white flex md:hidden items-center justify-center">
+                                    <button type="button" onClick={() => document.getElementById(`info_modal_${index}`).showModal()} className="w-6 h-6 rounded bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 text-white flex lg:hidden items-center justify-center">
                                         <FontAwesomeIcon icon={faFile} className="w-3 h-3 text-inherit" />
                                     </button>
-                                    <dialog id={`info_modal_${index}`} className="modal md:hidden">
+                                    <dialog id={`info_modal_${index}`} className="modal lg:hidden">
                                         <div className="modal-box dark:bg-zinc-800">
                                             <form method="dialog">
                                                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
@@ -799,6 +799,14 @@ export default function SuratPage() {
                                                     </p>
                                                     <p className="text-sm font-medium">
                                                         {value['nama_siswa']}
+                                                    </p>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-xs opacity-50">
+                                                        Kelas
+                                                    </p>
+                                                    <p className="text-sm font-medium">
+                                                        {value['kelas']} {value['jurusan']} {value['rombel']}
                                                     </p>
                                                 </div>
                                                 <div className="flex flex-col gap-1">

@@ -44,8 +44,8 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="bg-gradient-to-t  from-blue-50 to-white  md:to-cyan-50 w-full h-screen flex items-center justify-center text-zinc-700">
-            <form onSubmit={submitLoginForm} className="p-5 md:rounded-2xl w-full h-full md:h-fit bg-transparent md:bg-white md:w-1/3 md:shadow-2xl flex md:block flex-col justify-between">
+        <div className="bg-white dark:bg-zinc-900 md:bg-gradient-to-t md:from-blue-200 dark:md:from-blue-500/30  from-blue-50 to-white dark:to-zinc-900  md:to-cyan-50 w-full h-screen flex items-center justify-center text-zinc-700 dark:text-zinc-200">
+            <form onSubmit={submitLoginForm} className="p-5 md:rounded-2xl w-full md:w-2/3 lg:w-1/3 h-full md:h-fit bg-transparent md:bg-white dark:md:bg-zinc-900 md:shadow-2xl dark:md:shadow-blue-500/10 flex md:block flex-col justify-between">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-5">
                         <Image src={'/logo-sekolah-2.png'} width={20} height={20} alt="Logo Sekolah" />
@@ -60,13 +60,13 @@ export default function LoginPage() {
                 </div>
                 <div className="md:my-10 md:px-20 space-y-2">
                     <div className="relative w-full flex justify-center">
-                        <input type="text" disabled={loginLoading} required onChange={e => setLoginForm(state => ({...state, email: e.target.value}))} className="w-full rounded-full border border-zinc-100/0 bg-zinc-50 shadow-lg pl-12 pr-3 h-12 placeholder-shown:border-zinc-100 placeholder-shown:shadow-none placeholder-shown:bg-zinc-50/0 transition-all duration-300 outline-none peer" placeholder="Masukkan Email anda" />
+                        <input type="text" disabled={loginLoading} required onChange={e => setLoginForm(state => ({...state, email: e.target.value}))} className="w-full rounded-full border border-zinc-100/0 bg-zinc-50 dark:bg-zinc-700 shadow-lg pl-12 pr-3 h-12 placeholder-shown:border-zinc-100 dark:placeholder-shown:border-zinc-800 placeholder-shown:shadow-none placeholder-shown:bg-zinc-50/0 dark:placeholder-shown:bg-zinc-700/0 transition-all duration-300 outline-none peer" placeholder="Masukkan Email anda" />
                         <div className="absolute top-0 left-0 w-12 h-12 flex items-center justify-center peer-placeholder-shown:text-zinc-600 text-zinc-400">
                             <FontAwesomeIcon icon={faEnvelope} className="w-4 h-4 text-inherit" />
                         </div>
                     </div>
                     <div className="relative w-full flex justify-center">
-                        <input disabled={loginLoading} type={`${showPass ? 'text' : 'password'}`} required onChange={e => setLoginForm(state => ({...state, password: e.target.value}))} className="w-full rounded-full border border-zinc-100/0 bg-zinc-50 shadow-lg pl-12 pr-3 h-12 placeholder-shown:border-zinc-100 placeholder-shown:shadow-none placeholder-shown:bg-zinc-50/0 transition-all duration-300 outline-none peer" placeholder="Masukkan Password anda" />
+                        <input disabled={loginLoading} type={`${showPass ? 'text' : 'password'}`} required onChange={e => setLoginForm(state => ({...state, password: e.target.value}))} className="w-full rounded-full border dark:bg-zinc-700 border-zinc-100/0 bg-zinc-50 shadow-lg pl-12 pr-3 h-12 placeholder-shown:border-zinc-100 dark:placeholder-shown:border-zinc-800 placeholder-shown:shadow-none placeholder-shown:bg-zinc-50/0 transition-all duration-300 outline-none peer" placeholder="Masukkan Password anda" />
                         <div className="absolute top-0 left-0 w-12 h-12 flex items-center justify-center peer-placeholder-shown:text-zinc-600 text-zinc-400">
                             <FontAwesomeIcon icon={faKey} className="w-4 h-4 text-inherit" />
                         </div>

@@ -242,7 +242,7 @@ export default function Home() {
 
           <hr className="my-2.5 dark:opacity-20" />
 
-          <div className="grid md:grid-cols-4 gap-5">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
 
             <div className="w-full p-5 rounded shadow hover:shadow-lg transition-all duration-150 dark:border dark:border-zinc-800 bg-gradient-to-t dark:hover:from-zinc-800">
               <div className="flex justify-center w-full">
@@ -313,7 +313,7 @@ export default function Home() {
           <hr className="my-2.5 dark:opacity-20" />
 
           <div className="p-5 rounded-lg border dark:border-zinc-700 text-xs md:text-sm">
-            <div className="grid md:grid-cols-2 gap-5">
+            <div className="grid lg:grid-cols-2 gap-5">
               <div className="w-full">
                 <h1 className="font-bold md:text-3xl">
                   Daftar Siswa Terlambat
