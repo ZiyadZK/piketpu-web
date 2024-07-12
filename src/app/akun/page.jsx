@@ -73,14 +73,15 @@ export default function AkunPage() {
         event.preventDefault()
 
         const jsonBody = {
-            id_akun: get_uuid(),
-            id_guru_piket_akun: selectedDataPegawai['id_guru_piket_akun'],
+            piket_id_pegawai: selectedDataPegawai['piket_id_pegawai'],
             nama_akun: selectedDataPegawai['nama_akun'],
             nickname_akun: event.target[0].value,
-            email_akun: event.target[1].value,
-            password_akun: event.target[2].value,
-            role_akun: event.target[3].value
+            email_akun: selectedDataPegawai['email_akun'],
+            password_akun: event.target[1].value,
+            role_akun: event.target[2].value
         }
+
+        console.log(jsonBody)
 
         if(Object.values(jsonBody).includes(undefined)) {
             return
@@ -138,9 +139,8 @@ export default function AkunPage() {
 
         const payload = {
             nickname_akun: event.target[0].value,
-            email_akun: event.target[1].value,
-            password_akun: event.target[2].value,
-            role_akun: event.target[3].value
+            password_akun: event.target[1].value,
+            role_akun: event.target[2].value
         }
 
         document.getElementById(modal).close()
@@ -247,14 +247,14 @@ export default function AkunPage() {
         filterDataPegawai()
     }, [searchDataPegawai])
 
-    const selectDataPegawai = (id_guru_piket_akun, nama_akun) => {
-        setSelectedDataPegawai({id_guru_piket_akun, nama_akun})
+    const selectDataPegawai = (piket_id_pegawai, nama_akun, email_akun) => {
+        setSelectedDataPegawai({piket_id_pegawai, nama_akun, email_akun})
     }
 
     return (
         <MainLayoutPage>
             <Toaster />
-            <div className="mt-5 dark:text-zinc-200 text-zinc-700">
+            <div className="p-5 border dark:border-zinc-800 bg-white dark:bg-zinc-900 md:rounded-xl rounded-md text-xs">
                 <button type="button" onClick={() => document.getElementById('tambah_akun').showModal()} className="px-4 py-2 rounded bg-blue-500 flex items-center justify-center gap-3 text-white dark:bg-zinc-950 dark:hover:bg-black hover:bg-blue-400">
                     <FontAwesomeIcon icon={faUserPlus} className="w-4 h-4 text-inherit" />
                     Tambah
@@ -290,7 +290,7 @@ export default function AkunPage() {
                         {fetchDataPegawai === 'fetched' && (
                             <div className="py-2 relative w-full overflow-auto max-h-[250px]">
                                 {filteredDataPegawai.map((value, index) => (
-                                    <button type="button" onClick={() => selectDataPegawai(value['id_pegawai'], value['nama_pegawai'])} key={index} className="flex items-center p-3 rounded-lg  hover:bg-zinc-50 dark:hover:bg-zinc-700/50 w-full text-start">
+                                    <button type="button" onClick={() => selectDataPegawai(value['id_pegawai'], value['nama_pegawai'], value['email_pegawai'])} key={index} className="flex items-center p-3 rounded-lg  hover:bg-zinc-50 dark:hover:bg-zinc-700/50 w-full text-start">
                                         <p className="w-3/5 text-xs">
                                             {value['nama_pegawai']}
                                         </p>
@@ -308,7 +308,7 @@ export default function AkunPage() {
                                     ID Pegawai
                                 </p>
                                 <p className="w-full md:w-3/5">
-                                    {selectedDataPegawai['id_guru_piket_akun']}
+                                    {selectedDataPegawai['piket_id_pegawai']}
                                 </p>
                             </div>
                             <div className="flex flex-col md:flex-row md:items-center gap-1">
@@ -329,7 +329,9 @@ export default function AkunPage() {
                                 <p className="opacity-70 w-full md:w-2/5">
                                     Email
                                 </p>
-                                <input type="text" required className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Email" />
+                                <p className="w-full md:w-3/5">
+                                    {selectedDataPegawai['email_akun']}
+                                </p>
                             </div>
                             <div className="flex flex-col md:flex-row md:items-center gap-1">
                                 <p className="opacity-70 w-full md:w-2/5">
@@ -419,34 +421,41 @@ export default function AkunPage() {
                                                     <p className="opacity-70 w-full md:w-2/5">
                                                         Nickname
                                                     </p>
-                                                    <input type="text" required className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Nama Pendek" />
+                                                    <p className="w-full md:w-3/5">
+                                                        {value['nickname_akun']}
+                                                    </p>
                                                 </div>
                                                 <div className="flex flex-col md:flex-row md:items-center gap-1">
                                                     <p className="opacity-70 w-full md:w-2/5">
                                                         Email
                                                     </p>
-                                                    <input disabled type="text" className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Email" />
+                                                    <p className="w-full md:w-3/5">
+                                                        {value['email_akun']}
+                                                    </p>
                                                 </div>
                                                 <div className="flex flex-col md:flex-row md:items-center gap-1">
                                                     <p className="opacity-70 w-full md:w-2/5">
                                                         Password
                                                     </p>
-                                                    <input disabled type="text" className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Password" />
+                                                    <p className="w-full md:w-3/5">
+                                                        {value['password_akun']}
+                                                    </p>
                                                 </div>
                                                 <div className="flex flex-col md:flex-row md:items-center gap-1">
                                                     <p className="opacity-70 w-full md:w-2/5">
                                                         Nama
                                                     </p>
-                                                    <input disabled type="text" className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Nama" />
+                                                    <p className="w-full md:w-3/5">
+                                                        {value['nama_akun']}
+                                                    </p>
                                                 </div>
                                                 <div className="flex flex-col md:flex-row md:items-center gap-1">
                                                     <p className="opacity-70 w-full md:w-2/5">
                                                         Role
                                                     </p>
-                                                    <select disabled className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700 cursor-pointer">
-                                                        <option value="Piket">Piket</option>
-                                                        <option value="Admin">Admin</option>
-                                                    </select>
+                                                    <p className="w-full md:w-3/5">
+                                                        {value['role_akun']}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -467,12 +476,6 @@ export default function AkunPage() {
                                                         Nickname
                                                     </p>
                                                     <input type="text" defaultValue={value['nickname_akun']} required className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Nickname" />
-                                                </div>
-                                                <div className="flex flex-col md:flex-row md:items-center gap-1">
-                                                    <p className="opacity-70 w-full md:w-2/5">
-                                                        Email
-                                                    </p>
-                                                    <input type="text" defaultValue={value['email_akun']} required className="w-full md:w-3/5 px-3 py-1 rounded bg-zinc-100 dark:bg-zinc-700" placeholder="Masukkan Email" />
                                                 </div>
                                                 <div className="flex flex-col md:flex-row md:items-center gap-1">
                                                     <p className="opacity-70 w-full md:w-2/5">
