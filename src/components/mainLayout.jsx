@@ -3,7 +3,7 @@
 import { jakarta } from "@/libs/fonts"
 import { getLoggedUserdata } from "@/libs/functions/userdata"
 import { M_Akun_logout } from "@/libs/services/M_Akun"
-import { faBookBookmark, faCog, faHouse, faMoon, faSignOut, faSun, faTimeline, faUserLock } from "@fortawesome/free-solid-svg-icons"
+import { faBookBookmark, faCog, faFileCircleExclamation, faHouse, faMoon, faSearch, faSignOut, faSun, faTimeline, faUserLock } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { motion } from "framer-motion"
 import Image from "next/image"
@@ -25,7 +25,8 @@ const navLinkMasterData = [
 
 const navLink = [
     ...navLinkMasterData,
-    { title: 'Dashboard', icon: faHouse, url: '/', page: 'Dashboard Page', role: ['Operator', 'Admin']}
+    { title: 'Dashboard', icon: faHouse, url: '/', page: 'Dashboard Page', role: ['Operator', 'Admin']},
+    { title: 'Detail Siswa', icon: faFileCircleExclamation, url: '/detail', page: 'Detail Siswa', role: ['Operator', 'Admin']}
 ]
 
 export default function MainLayoutPage({children}) {
@@ -165,7 +166,7 @@ export default function MainLayoutPage({children}) {
                         {!filteredPath ? (
                             <div className="loading loading-spinner loading-sm text-zinc-400 py-4"></div>
                         ):(
-                            <div className="flex items-center gap-2 overflow-auto relative w-full pb-2">
+                            <div className="flex items-center overflow-auto relative w-full pb-2">
                                 {loggedAkun && navLinkMasterData.map((nav, index) => nav['role'].includes(loggedAkun.role_akun) && (
                                     <Link
                                         key={index} 
@@ -197,6 +198,10 @@ export default function MainLayoutPage({children}) {
                                         
                                     </Link>
                                 ))}
+                                <Link href={'/ceksiswa'} className="px-3 py-2 text-xs rounded-md bg-blue-500 hover:bg-blue-400 focus:bg-blue-600 flex items-center justify-center gap-3 text-white">
+                                    <FontAwesomeIcon icon={faSearch} className="w-3 h-3 text-inherit opacity-60" />
+                                    Cek Siswa
+                                </Link>
                             </div>
                         )}
                     </div>
