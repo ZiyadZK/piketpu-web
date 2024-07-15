@@ -7,10 +7,14 @@ import { faArrowRight, faKey, faSpinner } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function LoginPage() {
     const router = useRouter()
+
+    const [query, setQuery] = useState({
+        callbackUrl: ''
+    })
 
     const [loginLoading, setLoginLoading] = useState(false)
     const [showPass, setShowPass] = useState(false)
@@ -31,7 +35,11 @@ export default function LoginPage() {
                 title: 'Berhasil login!',
                 icon: 'success'
             }).then(() => {
-                router.push('/')
+                if(query['callbackUrl'] !== '' ) {
+                    router.push('/')
+                }else{
+                    router.push(query['callbackUrl'])
+                }
             })
         }else{
             swalToast.fire({
@@ -42,6 +50,16 @@ export default function LoginPage() {
             setLoginLoading(false)
         }
     }
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search)
+        const queryObject = {}
+        searchParams.forEach((value, key) => {
+            queryObject[key] = value
+        })
+        console.log(queryObject)
+        setQuery(queryObject)
+    }, [])
 
     return (
         <div className="bg-white dark:bg-zinc-900 md:bg-gradient-to-t md:from-blue-200 dark:md:from-blue-500/30  from-blue-50 to-white dark:to-zinc-900  md:to-cyan-50 w-full h-screen flex items-center justify-center text-zinc-700 dark:text-zinc-200">

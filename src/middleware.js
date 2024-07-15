@@ -5,13 +5,14 @@ import { NextResponse } from "next/server"
 const rolePath = {
     '/akun': ['Admin'],
     '/surat': ['Admin', 'Piket'],
-    '/riwayat': ['Admin']
+    '/riwayat': ['Admin'],
+    '/detail': ['Admin', 'Piket']
 }
 
 export async function middleware(req) {
     const pathname = req.nextUrl.pathname
     if(!cookies().has('userdata')) {
-        return NextResponse.redirect(new URL('/login', req.url))
+        return NextResponse.redirect(new URL(`/login?callbackUrl=${encodeURIComponent(pathname)}`, req.url))
     }
 
     const decryptResponse = await decryptKey(cookies().get('userdata').value)
@@ -33,5 +34,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-    matcher: ['/akun', '/surat', '/']
+    matcher: ['/akun', '/surat', '/', '/detail', '/detail/:path*']
 }

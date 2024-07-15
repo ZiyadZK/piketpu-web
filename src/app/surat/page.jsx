@@ -773,9 +773,7 @@ export default function SuratPage() {
                                         {value['keterangan']}
                                     </div>
                                     <div className="col-span-2 hidden lg:flex items-center gap-3 text-xs lg:text-sm">
-                                        <a href={`https://simak.smkpunegerijabar.sch.id/data/pegawai/${value['id_guru_piket']}`} className="hover:underline">
-                                            {value['nama_guru_piket']}
-                                        </a>
+                                        {value['nama_piket']}
                                     </div>
                                     <div className="col-span-5 lg:col-span-2 flex items-center justify-center lg:gap-2 gap-1">
                                         {renderSingleProcess !== 'loading' && (
