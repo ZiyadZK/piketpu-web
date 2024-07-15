@@ -51,3 +51,34 @@ export const M_Surat_delete = async (id_surat_izin) => {
         data: response.data
     }
 }
+
+export const M_Surat_getAll_nis = async (nis) => {
+    const response = await api_get(`/v1/data/surat?filters[nis_siswa]=${nis}`)
+
+    return {
+        success: response.success,
+        message: response.message,
+        data: response.data
+    }
+}
+
+export const M_Surat_getDetail = async (nis) => {
+    const response = await api_get(`/v1/data/detail/${nis}`)
+
+    return {
+        success: response.success,
+        message: response.message,
+        data: response.data
+    }
+}
+
+export const M_Surat_reset_nis = async (nis) => {
+    const response = await api_delete(`/v1/data/surat/${nis}`, {nis})
+
+    return {
+        success: response.success,
+        message: response.message,
+        data: response.data
+    }
+
+}
