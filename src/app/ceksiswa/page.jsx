@@ -6,12 +6,18 @@ import { date_getDay, date_getMonth, date_getYear } from "@/libs/functions/date"
 import { M_Kelas_get } from "@/libs/services/M_Kelas"
 import { M_Siswa_getAll } from "@/libs/services/M_Siswa"
 import { M_Surat_getAll, M_Surat_getAll_nis, M_Surat_getDetail, M_Surat_reset_nis } from "@/libs/services/M_Surat"
-import { faCheck, faExclamationTriangle, faRefresh, faSearch } from "@fortawesome/free-solid-svg-icons"
+import { faCheck, faEllipsisH, faExclamationCircle, faExclamationTriangle, faInfoCircle, faRefresh, faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useRouter, useSearchParams } from "next/navigation"
+
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
 
 export default function CekSiswaPage() {
+    const router = useRouter()
+
+    const searchParams = useSearchParams()
+    const queryNis = searchParams.get('nis')
 
     const [dataSiswa, setDataSiswa] = useState(null)
     const [dataKelas, setDataKelas] = useState(null)
@@ -44,6 +50,12 @@ export default function CekSiswaPage() {
                 if(responseSurat.success) {
                     setDataSurat(responseSurat.data)
                 }
+            }else {
+                setDataSiswa(null)
+                setDataKelas(null)
+                setDataSurat({
+                    data_total_semua: [], data_total_bulan: []
+                })
             }
         }
         setLoadingFetch(state => ({...state, siswa: 'fetched'}))
@@ -54,8 +66,12 @@ export default function CekSiswaPage() {
     
 
     useEffect(() => {
-        if(dataSiswa === null) {
-            document.getElementById(`cari_siswa`).showModal()
+        if(queryNis === null) {
+            if(dataSiswa === null) {
+                document.getElementById(`cari_siswa`).showModal()
+            }
+        }else{
+            getData(queryNis)
         }
     }, [])
 
@@ -105,16 +121,8 @@ export default function CekSiswaPage() {
 
         document.getElementById(modal).close()
 
-        Swal.fire({
-            title: 'Sedang memproses data',
-            timer: 60000,
-            allowEnterKey: false,
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            didOpen: async () => {
-                await getData(e.target[0].value)
-            }
-        })
+        await getData(e.target[0].value)
+        e.target[0].value = ''
 
     }
 
@@ -143,18 +151,34 @@ export default function CekSiswaPage() {
                 </div>
             </dialog>
             <div className="flex flex-col gap-5 items-center">
+                {loadingFetch['siswa'] === '' && dataSiswa === null && (
+                    <div className="p-5 border dark:border-zinc-800 bg-white dark:bg-zinc-900 md:rounded-xl rounded-md text-sm sm:text-sm md:text-xs w-full max-w-[900px] shadow-2xl dark:shadow-white/10">
+                        <button type="button" onClick={() => document.getElementById('cari_siswa').showModal()} className="px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 ease-out duration-200 flex items-center justify-center gap-3">
+                            <FontAwesomeIcon icon={faSearch} className="w-3 h-3 text-inherit opacity-50" />
+                            Cari Siswa
+                        </button>
+                        <hr className="my-5 dark:opacity-10" />
+                        <p>
+                            Anda perlu mencari dan memasukkan NIS Siswa terlebih dahulu untuk melihat detail dari siswa tersebut.
+                        </p>
+                    </div>
+                )}
+                {loadingFetch['siswa'] === 'loading' && (
+                    <div className="py-5 loading loading-sm loading-spinner opacity-50"></div>
+                )}
                 {loadingFetch['siswa'] === 'fetched' && (
                     <div className="p-5 border dark:border-zinc-800 bg-white dark:bg-zinc-900 md:rounded-xl rounded-md text-sm sm:text-sm md:text-xs w-full max-w-[900px] shadow-2xl dark:shadow-white/10">
+                        <button type="button" onClick={() => document.getElementById('cari_siswa').showModal()} className="px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 ease-out duration-200 flex items-center justify-center gap-3">
+                            <FontAwesomeIcon icon={faSearch} className="w-3 h-3 text-inherit opacity-50" />
+                            Cari Siswa lain
+                        </button>
+                        <hr className="my-5 dark:opacity-10" />
                         {loadingFetch['siswa'] !== 'fetched' && (
                             <>
                                 <div className="flex items-center gap-2">
                                     <button type="button" disabled className="px-3 py-2 rounded-md bg-zinc-300 dark:bg-zinc-500 flex items-center justify-center gap-3 w-1/2 md:w-fit animate-pulse">
                                         <FontAwesomeIcon icon={faRefresh} className="w-3 h-3 text-inherit opacity-0" />
                                         <span className="opacity-0">Reset</span>
-                                    </button>
-                                    <button type="button" disabled className="px-3 py-2 rounded-md bg-zinc-300 dark:bg-zinc-500 flex items-center justify-center gap-3 w-1/2 md:w-fit animate-pulse">
-                                        <FontAwesomeIcon icon={faExclamationTriangle} className="w-3 h-3 text-inherit opacity-0" />
-                                        <span className="opacity-0">Peringatkan</span>
                                     </button>
                                 </div>
                                 <hr className="my-5 dark:opacity-10" />
@@ -163,13 +187,9 @@ export default function CekSiswaPage() {
                         {loadingFetch['siswa'] === 'fetched' && dataSurat['data_total_semua'].length > 0 && dataSiswa !== null && (
                             <>
                                 <div className="flex items-center gap-2">
-                                    <button type="button" onClick={() => submitReset()} className="px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-3 w-1/2 md:w-fit">
-                                        <FontAwesomeIcon icon={faRefresh} className="w-3 h-3 text-inherit opacity-50" />
-                                        Reset
-                                    </button>
-                                    <button type="button" className="px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-3 w-1/2 md:w-fit">
+                                    <button type="button" onClick={() => router.push(`/detail/${dataSiswa.nis}`)} className="px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-3 w-1/2 md:w-fit">
                                         <FontAwesomeIcon icon={faExclamationTriangle} className="w-3 h-3 text-inherit opacity-50" />
-                                        Peringatkan
+                                        Detail Khusus
                                     </button>
                                 </div>
                                 <hr className="my-5 dark:opacity-10" />
@@ -312,18 +332,18 @@ export default function CekSiswaPage() {
                                     <div className="divide-y dark:divide-zinc-700">
                                         <div className="flex flex-col sm:flex-row gap-2 py-3">
                                             <p className="w-full sm:w-1/5 opacity-60">
-                                                Total Absensi
+                                                Total Izin
                                             </p>
                                             <p className="w-full sm:w-4/5">
-                                                0 Absensi
+                                                0 Izin
                                             </p>
                                         </div>
                                         <div className="flex flex-col sm:flex-row gap-2 py-3">
                                             <p className="w-full sm:w-1/5 opacity-60">
-                                                Total Absensi bulan ini
+                                                Total Izin bulan ini
                                             </p>
                                             <p className="w-full sm:w-4/5">
-                                                0 Absensi
+                                                0 Izin
                                             </p>
                                         </div>
                                         <div className="flex flex-col sm:flex-row gap-2 py-3">
@@ -426,23 +446,23 @@ export default function CekSiswaPage() {
                                     <div className="divide-y dark:divide-zinc-700">
                                         <div className="flex flex-col sm:flex-row gap-2 py-3">
                                             <p className="w-full sm:w-1/5 opacity-60">
-                                                Total Absensi
+                                                Total Izin
                                             </p>
                                             <p className="w-full sm:w-4/5">
-                                                {dataSurat['data_total_semua'].length} Absensi
+                                                {dataSurat['data_total_semua'].length} Izin
                                             </p>
                                         </div>
                                         <div className="flex flex-col sm:flex-row gap-2 py-3">
                                             <p className="w-full sm:w-1/5 opacity-60">
-                                                Total Absensi bulan ini
+                                                Total Izin bulan ini
                                             </p>
                                             <p className="w-full sm:w-4/5">
-                                                {dataSurat['data_total_bulan'].length} Absensi
+                                                {dataSurat['data_total_bulan'].length} Izin
                                             </p>
                                         </div>
                                         <div className="flex flex-col sm:flex-row gap-2 py-3">
                                             <p className="w-full sm:w-1/5 opacity-60">
-                                                Awal melakukan Absensi
+                                                Awal melakukan Izin
                                             </p>
                                             <p className="w-full sm:w-4/5">
                                                 {date_getDay(dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['tanggal'])} {date_getMonth('string', dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['tanggal'])} {date_getYear(dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['tanggal'])}, {dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['waktu']}
@@ -450,7 +470,7 @@ export default function CekSiswaPage() {
                                         </div>
                                         <div className="flex flex-col sm:flex-row gap-2 py-3">
                                             <p className="w-full sm:w-1/5 opacity-60">
-                                                Terakhir melakukan Absensi
+                                                Terakhir melakukan Izin
                                             </p>
                                             <p className="w-full sm:w-4/5">
                                                 {date_getDay(dataSurat['data_total_semua'][0]['tanggal'])} {date_getMonth('string', dataSurat['data_total_semua'][0]['tanggal'])} {date_getYear(dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['tanggal'])}, {dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['waktu']}
@@ -466,10 +486,10 @@ export default function CekSiswaPage() {
                                                 Total
                                             </div>
                                             <div className="col-span-2 flex items-center justify-center font-extrabold p-3">
-                                                Keseluruhan
+                                                Bulan ini
                                             </div>
                                             <div className="col-span-2 flex items-center justify-center font-extrabold p-3">
-                                                Bulan Ini
+                                                Semester ini
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-7 divide-x dark:divide-zinc-700 ">
@@ -477,10 +497,10 @@ export default function CekSiswaPage() {
                                                 Mengikuti Pelajaran
                                             </div>
                                             <div className="col-span-2 flex items-center justify-center p-3">
-                                                {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Mengikuti Pelajaran').length} Absensi
+                                                {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Mengikuti Pelajaran').length} Izin
                                             </div>
                                             <div className="col-span-2 flex items-center justify-center p-3">
-                                                {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Mengikuti Pelajaran').length} Absensi
+                                                {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Mengikuti Pelajaran').length} Izin
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-7 divide-x dark:divide-zinc-700 ">
@@ -488,10 +508,10 @@ export default function CekSiswaPage() {
                                                 Meninggalkan Pelajaran
                                             </div>
                                             <div className="col-span-2 flex items-center justify-center p-3">
-                                                {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran').length} Absensi
+                                                {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran').length} Izin
                                             </div>
                                             <div className="col-span-2 flex items-center justify-center p-3">
-                                                {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran').length} Absensi
+                                                {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran').length} Izin
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-7 divide-x dark:divide-zinc-700 ">
@@ -499,36 +519,39 @@ export default function CekSiswaPage() {
                                                 Meninggalkan Pelajaran Sementara
                                             </div>
                                             <div className="col-span-2 flex items-center justify-center p-3">
-                                                {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran Sementara').length} Absensi
+                                                {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran Sementara').length} Izin
                                             </div>
                                             <div className="col-span-2 flex items-center justify-center p-3">
-                                                {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran Sementara').length} Absensi
+                                                {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran Sementara').length} Izin
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <hr className="my-5 dark:opacity-10" />
                                 <div className="w-full p-3 rounded-md border dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 grid grid-cols-12">
-                                    <div className="col-span-3 font-medium flex items-center">
+                                    <div className="col-span-3 font-medium hidden md:flex items-center">
                                         Tanggal
                                     </div>
-                                    <div className="col-span-3 font-medium flex items-center">
-                                        Absensi
+                                    <div className="col-span-8 md:col-span-3 font-medium flex items-center">
+                                        Izin
                                     </div>
-                                    <div className="col-span-3 font-medium flex items-center">
+                                    <div className="col-span-3 font-medium hidden md:flex items-center">
                                         Keterangan
                                     </div>
-                                    <div className="col-span-3 font-medium flex items-center">
+                                    <div className="col-span-3 font-medium hidden md:flex items-center">
                                         Guru Piket
+                                    </div>
+                                    <div className="col-span-4 md:hidden flex items-center justify-center">
+                                        <FontAwesomeIcon icon={faEllipsisH} className="w-3 h-3 text-inherit" />
                                     </div>
                                 </div>
                                 <div className="relative overflow-auto py-2 max-h-[500px] divide-y dark:divide-zinc-700">
                                     {dataSurat['data_total_semua'].map((value, index) => (
                                         <div key={index} className="w-full p-3  grid grid-cols-12">
-                                            <div className="col-span-3 flex items-center">
+                                            <div className="col-span-3 hidden md:flex items-center">
                                                 {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}, {value['waktu']}
                                             </div>
-                                            <div className="col-span-3 flex items-center">
+                                            <div className="col-span-8 md:col-span-3 flex items-center">
                                                 {value['tipe'] === 'Mengikuti Pelajaran' && (
                                                     <p className="text-xs rounded-full text-green-500 font-medium">
                                                         Mengikuti Pelajaran
@@ -545,12 +568,73 @@ export default function CekSiswaPage() {
                                                     </p>
                                                 )}
                                             </div>
-                                            <div className="col-span-3 flex items-center">
+                                            <div className="col-span-3 hidden md:flex items-center">
                                                 {value['keterangan']}
                                             </div>
-                                            <div className="col-span-3 flex items-center">
+                                            <div className="col-span-3 hidden md:flex items-center">
                                                 {value['nama_piket']}
                                             </div>
+                                            <div className="col-span-4 md:hidden flex items-center justify-center gap-2">
+                                                <button type="button" onClick={() => document.getElementById(`info_surat_${value['id_surat_izin']}`).showModal()} className="w-6 h-6 rounded-md border dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+                                                    <FontAwesomeIcon icon={faInfoCircle} className="w-3 h-3 text-inherit" />
+                                                </button>
+                                            </div>
+                                            <dialog id={`info_surat_${value['id_surat_izin']}`} className="modal backdrop-blur-sm">
+                                                <div className="modal-box rounded-md dark:bg-zinc-900 border dark:border-zinc-700">
+                                                    <form method="dialog">
+                                                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                    </form>
+                                                    <h3 className="font-bold text-lg">Informasi Izin</h3>
+                                                    <div className="divide-y dark:divide-zinc-700">
+                                                        <div className="flex flex-col gap-1 py-3">
+                                                            <p className="opacity-60">
+                                                                Tanggal & Waktu
+                                                            </p>
+                                                            <p>
+                                                                {date_getDay(value['tanggal'])} {date_getMonth('string', value['tanggal'])} {date_getYear(value['tanggal'])}, {value['waktu']}
+                                                            </p>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 py-3">
+                                                            <p className="opacity-60">
+                                                                Izin
+                                                            </p>
+                                                            <div className="">
+                                                                {value['tipe'] === 'Mengikuti Pelajaran' && (
+                                                                    <p className="text-xs rounded-full text-green-500 font-medium">
+                                                                        Mengikuti Pelajaran
+                                                                    </p>
+                                                                )}
+                                                                {value['tipe'] === 'Meninggalkan Pelajaran' && (
+                                                                    <p className="text-xs rounded-full text-red-500 font-medium">
+                                                                        Meninggalkan Pelajaran
+                                                                    </p>
+                                                                )}
+                                                                {value['tipe'] === 'Meninggalkan Pelajaran Sementara' && (
+                                                                    <p className="text-xs rounded-full text-amber-500 font-medium">
+                                                                        Meninggalkan Pelajaran Sementara
+                                                                    </p>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 py-3">
+                                                            <p className="opacity-60">
+                                                                Keterangan
+                                                            </p>
+                                                            <div className="">
+                                                                {value['keterangan']}
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 py-3">
+                                                            <p className="opacity-60">
+                                                                Guru Piket
+                                                            </p>
+                                                            <div className="">
+                                                                {value['nama_piket']}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </dialog>
                                         </div>
                                     ))}
                                 </div>

@@ -173,7 +173,7 @@ export default function Home() {
         </div>
       )}
       {loadingFetch === 'fetched' && data.length > 0 && (
-        <div className="mt-10 dark:text-zinc-200 text-zinc-700">
+        <div className="p-5 border dark:border-zinc-800 bg-white dark:bg-zinc-900 md:rounded-xl rounded-md text-sm sm:text-sm md:text-xs">
 
           <div className="flex md:flex-row flex-col gap-1 md:gap-0 md:items-center">
             <div className="w-full md:w-1/6">

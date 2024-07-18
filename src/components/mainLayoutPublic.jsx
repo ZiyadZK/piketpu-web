@@ -1,8 +1,6 @@
 'use client'
 
 import { jakarta } from "@/libs/fonts"
-import { getLoggedUserdata } from "@/libs/functions/userdata"
-import { M_Akun_logout } from "@/libs/services/M_Akun"
 import { faBookBookmark, faCog, faFileCircleExclamation, faHouse, faMoon, faSearch, faSignOut, faSun, faTimeline, faUserLock } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { motion } from "framer-motion"

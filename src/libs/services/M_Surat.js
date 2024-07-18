@@ -82,3 +82,13 @@ export const M_Surat_reset_nis = async (nis) => {
     }
 
 }
+
+export const M_Surat_peringatkan_siswa = async (nis_siswa) => {
+    const response = await api_post('/v1/peringatkan-siswa', {nis_siswa})
+
+    return {
+        success: response.success,
+        message: response.message,
+        data: response.data
+    }
+}

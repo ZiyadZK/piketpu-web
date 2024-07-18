@@ -1,5 +1,7 @@
 'use client'
 
+import moment from "moment-timezone";
+
 
 
 export const date_getDay = (date) => {
@@ -72,7 +74,7 @@ export const date_getMonth = (format = 'number', date) => {
     }
 }
 
-export const date_getYear = (date) => {
+export const date_getYear = (date = null) => {
     let delimiter = null;
     let year;
 
@@ -98,6 +100,7 @@ export const date_getYear = (date) => {
         }
     } else {
         const currentDate = new Date();
+        console.log(currentDate)
         year = String(currentDate.getFullYear());
     }
 
@@ -143,3 +146,32 @@ export const date_toInputHtml = (date) => {
     return `${year}-${day}-${month}`
 }
 
+export const date_getMonthRange = (inputDate) => {
+    // Use the current date if no input date is provided
+    const currentDate = inputDate ? moment.tz(inputDate, 'Asia/Jakarta') : moment().tz('Asia/Jakarta');
+
+    // Start date: the 1st day of the month of the currentDate in WIB
+    const startDate = currentDate.clone().startOf('month');
+
+    // End date: the last day of the month of the currentDate in WIB
+    const endDate = currentDate.clone().endOf('month');
+
+    // Convert dates to yyyy-mm-dd format
+    const formatDate = (date) => date.format('YYYY-MM-DD');
+
+    // Get the current date in WIB
+    const today = moment().tz('Asia/Jakarta');
+
+    // Start date and end date of the current month in WIB
+    const currentMonthStart = today.clone().startOf('month');
+    const currentMonthEnd = today.clone().endOf('month');
+
+    // Check if the inputDate is within the current month
+    const isCurrentMonth = currentDate.isBetween(currentMonthStart, currentMonthEnd, null, '[]');
+
+    return {
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
+        isCurrentMonth
+    };
+}

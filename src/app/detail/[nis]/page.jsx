@@ -1,10 +1,10 @@
 'use client'
 
 import MainLayoutPage from "@/components/mainLayout"
-import { date_getDay, date_getMonth, date_getYear } from "@/libs/functions/date"
+import { date_getDay, date_getMonth, date_getTime, date_getYear } from "@/libs/functions/date"
 import { M_Kelas_get } from "@/libs/services/M_Kelas"
 import { M_Siswa_getAll } from "@/libs/services/M_Siswa"
-import { M_Surat_getAll, M_Surat_getAll_nis, M_Surat_getDetail, M_Surat_reset_nis } from "@/libs/services/M_Surat"
+import { M_Surat_getAll, M_Surat_getAll_nis, M_Surat_getDetail, M_Surat_peringatkan_siswa, M_Surat_reset_nis } from "@/libs/services/M_Surat"
 import { faCheck, faExclamationTriangle, faRefresh } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
@@ -77,6 +77,13 @@ export default function DetailSiswaPage({ params: { nis }}) {
                         const response = await M_Surat_reset_nis(nis)
 
                         if(response.success) {
+                            await M_Riwayat_log({
+                                aksi: 'Reset',
+                                keterangan: `Mereset riwayat izin siswa`,
+                                payload: {nis},
+                                tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
+                                waktu: `${date_getTime()}`
+                            })
                             await getData()
                             Swal.fire({
                                 title: 'Sukses',
@@ -88,6 +95,53 @@ export default function DetailSiswaPage({ params: { nis }}) {
                                 title: 'Gagal',
                                 text: response.message,
                                 icon: 'success'
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    const submitPeringatkanSiswa = async () => {
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: 'Anda akan memperingatkan siswa ini',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
+        }).then((answer) => {
+            if(answer.isConfirmed) {
+                Swal.fire({
+                    title: 'Sedang memproses data',
+                    timer: 60000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEnterKey: false,
+                    allowEscapeKey: false,
+                    didOpen: async () => {
+                        const response = await M_Surat_peringatkan_siswa(nis)
+
+                        if(response.success) {
+                            await M_Riwayat_log({
+                                aksi: 'Peringatkan',
+                                keterangan: `Memperingatkan siswa`,
+                                payload: {nis},
+                                tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
+                                waktu: `${date_getTime()}`
+                            })
+                            Swal.fire({
+                                title: 'Sukses',
+                                text: 'Berhasil memperingatkan siswa tersebut',
+                                icon: 'success'
+                            })
+                        }else{
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Terdapat kesalahan disaat memproses data, hubungi Administrator!',
+                                icon: 'error'
                             })
                         }
                     }
@@ -122,10 +176,12 @@ export default function DetailSiswaPage({ params: { nis }}) {
                                     <FontAwesomeIcon icon={faRefresh} className="w-3 h-3 text-inherit opacity-50" />
                                     Reset
                                 </button>
-                                <button type="button" className="px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-3 w-1/2 md:w-fit">
-                                    <FontAwesomeIcon icon={faExclamationTriangle} className="w-3 h-3 text-inherit opacity-50" />
-                                    Peringatkan
-                                </button>
+                                {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Mengikuti Pelajaran').length > 0 && (
+                                    <button type="button" onClick={() => submitPeringatkanSiswa()} className="px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-3 w-1/2 md:w-fit">
+                                        <FontAwesomeIcon icon={faExclamationTriangle} className="w-3 h-3 text-inherit opacity-50" />
+                                        Peringatkan
+                                    </button>
+                                )}
                             </div>
                             <hr className="my-5 dark:opacity-10" />
                         </>
@@ -371,7 +427,7 @@ export default function DetailSiswaPage({ params: { nis }}) {
                     {loadingFetch['surat'] === 'fetched' && dataSiswa !== null && dataSurat['data_total_semua'].length < 1 && (
                         <div className="w-full flex justify-center items-center gap-3 pt-5">
                             <FontAwesomeIcon icon={faCheck} className="w-3 h-3 text-inherit opacity-60" />
-                            Tidak ada riwayat absensi
+                            Tidak ada riwayat izin
                         </div>
                     )}
                     {loadingFetch['surat'] === 'fetched' && dataSurat['data_total_semua'].length > 0 && (
@@ -381,23 +437,23 @@ export default function DetailSiswaPage({ params: { nis }}) {
                                 <div className="divide-y dark:divide-zinc-700">
                                     <div className="flex flex-col sm:flex-row gap-2 py-3">
                                         <p className="w-full sm:w-1/5 opacity-60">
-                                            Total Absensi
+                                            Total Izin
                                         </p>
                                         <p className="w-full sm:w-4/5">
-                                            {dataSurat['data_total_semua'].length} Absensi
+                                            {dataSurat['data_total_semua'].length} Izin
                                         </p>
                                     </div>
                                     <div className="flex flex-col sm:flex-row gap-2 py-3">
                                         <p className="w-full sm:w-1/5 opacity-60">
-                                            Total Absensi bulan ini
+                                            Total Izin bulan ini
                                         </p>
                                         <p className="w-full sm:w-4/5">
-                                            {dataSurat['data_total_bulan'].length} Absensi
+                                            {dataSurat['data_total_bulan'].length} Izin
                                         </p>
                                     </div>
                                     <div className="flex flex-col sm:flex-row gap-2 py-3">
                                         <p className="w-full sm:w-1/5 opacity-60">
-                                            Awal melakukan Absensi
+                                            Awal melakukan Izin
                                         </p>
                                         <p className="w-full sm:w-4/5">
                                             {date_getDay(dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['tanggal'])} {date_getMonth('string', dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['tanggal'])} {date_getYear(dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['tanggal'])}, {dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['waktu']}
@@ -405,7 +461,7 @@ export default function DetailSiswaPage({ params: { nis }}) {
                                     </div>
                                     <div className="flex flex-col sm:flex-row gap-2 py-3">
                                         <p className="w-full sm:w-1/5 opacity-60">
-                                            Terakhir melakukan Absensi
+                                            Terakhir melakukan Izin
                                         </p>
                                         <p className="w-full sm:w-4/5">
                                             {date_getDay(dataSurat['data_total_semua'][0]['tanggal'])} {date_getMonth('string', dataSurat['data_total_semua'][0]['tanggal'])} {date_getYear(dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['tanggal'])}, {dataSurat['data_total_semua'][dataSurat['data_total_semua'].length - 1]['waktu']}
@@ -421,10 +477,10 @@ export default function DetailSiswaPage({ params: { nis }}) {
                                             Total
                                         </div>
                                         <div className="col-span-2 flex items-center justify-center font-extrabold p-3">
-                                            Keseluruhan
+                                            Bulan ini
                                         </div>
                                         <div className="col-span-2 flex items-center justify-center font-extrabold p-3">
-                                            Bulan Ini
+                                            Semester Ini
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-7 divide-x dark:divide-zinc-700 ">
@@ -432,10 +488,10 @@ export default function DetailSiswaPage({ params: { nis }}) {
                                             Mengikuti Pelajaran
                                         </div>
                                         <div className="col-span-2 flex items-center justify-center p-3">
-                                            {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Mengikuti Pelajaran').length} Absensi
+                                            {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Mengikuti Pelajaran').length} Izin
                                         </div>
                                         <div className="col-span-2 flex items-center justify-center p-3">
-                                            {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Mengikuti Pelajaran').length} Absensi
+                                            {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Mengikuti Pelajaran').length} Izin
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-7 divide-x dark:divide-zinc-700 ">
@@ -443,10 +499,10 @@ export default function DetailSiswaPage({ params: { nis }}) {
                                             Meninggalkan Pelajaran
                                         </div>
                                         <div className="col-span-2 flex items-center justify-center p-3">
-                                            {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran').length} Absensi
+                                            {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran').length} Izin
                                         </div>
                                         <div className="col-span-2 flex items-center justify-center p-3">
-                                            {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran').length} Absensi
+                                            {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran').length} Izin
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-7 divide-x dark:divide-zinc-700 ">
@@ -454,10 +510,10 @@ export default function DetailSiswaPage({ params: { nis }}) {
                                             Meninggalkan Pelajaran Sementara
                                         </div>
                                         <div className="col-span-2 flex items-center justify-center p-3">
-                                            {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran Sementara').length} Absensi
+                                            {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran Sementara').length} Izin
                                         </div>
                                         <div className="col-span-2 flex items-center justify-center p-3">
-                                            {dataSurat['data_total_bulan'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran Sementara').length} Absensi
+                                            {dataSurat['data_total_semua'].filter(value => value['tipe'] === 'Meninggalkan Pelajaran Sementara').length} Izin
                                         </div>
                                     </div>
                                 </div>
@@ -468,7 +524,7 @@ export default function DetailSiswaPage({ params: { nis }}) {
                                     Tanggal
                                 </div>
                                 <div className="col-span-3 font-medium flex items-center">
-                                    Absensi
+                                    Izin
                                 </div>
                                 <div className="col-span-3 font-medium flex items-center">
                                     Keterangan

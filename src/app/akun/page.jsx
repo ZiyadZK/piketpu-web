@@ -1,10 +1,12 @@
 'use client'
 
 import MainLayoutPage from "@/components/mainLayout"
+import { date_getDay, date_getMonth, date_getTime, date_getYear } from "@/libs/functions/date"
 import { swalToast } from "@/libs/functions/toast"
 import { get_uuid } from "@/libs/functions/uuid"
 import { M_Akun_create, M_Akun_delete, M_Akun_getAll, M_Akun_update } from "@/libs/services/M_Akun"
 import { M_Pegawai_getAll } from "@/libs/services/M_Pegawai"
+import { M_Riwayat_log } from "@/libs/services/M_Riwayat"
 import { faEdit, faSave } from "@fortawesome/free-regular-svg-icons"
 import { faAngleLeft, faAngleRight, faSearch, faTrash, faUserPlus, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -49,6 +51,13 @@ export default function AkunPage() {
                         const response = await M_Akun_delete(typeof(id_akun) !== 'undefined' ? id_akun : selectedData)
                         
                         if(response.success) {
+                            await M_Riwayat_log({
+                                aksi: 'Hapus',
+                                keterangan: `Menghapus ${id_akun ? '1' : selectedData.length} akun`,
+                                payload: id_akun ? {id_akun} : {id_akun: selectedData},
+                                tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
+                                waktu: `${date_getTime()}`,
+                            })
                             swalToast.fire({
                                 title: 'Sukses',
                                 text: 'Berhasil menghapus akun tersebut!',
@@ -107,6 +116,13 @@ export default function AkunPage() {
                     didOpen: async () => {
                         const response = await M_Akun_create(jsonBody)
                         if(response.success) {
+                            await M_Riwayat_log({
+                                aksi: 'Tambah',
+                                keterangan: `Menambah 1 akun`,
+                                payload: jsonBody,
+                                tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
+                                waktu: `${date_getTime()}`
+                            })
                             event.target[0].value = ''
                             event.target[1].value = ''
                             event.target[2].value = ''
@@ -164,6 +180,13 @@ export default function AkunPage() {
                         const response = await M_Akun_update(id_akun, payload)
 
                         if(response.success) {
+                            await M_Riwayat_log({
+                                aksi: 'Ubah',
+                                keterangan: `Mengubah 1 akun`,
+                                payload: {id_akun, payload},
+                                tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
+                                waktu: `${date_getTime()}`
+                            })
                             swalToast.fire({
                                 title: 'Sukses mengubah akun tersebut',
                                 icon: 'success'

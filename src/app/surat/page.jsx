@@ -1,9 +1,10 @@
 'use client'
 
 import MainLayoutPage from "@/components/mainLayout"
-import { date_getDay, date_getMonth, date_getTime, date_getYear } from "@/libs/functions/date"
+import { date_getDay, date_getMonth, date_getMonthRange, date_getTime, date_getYear } from "@/libs/functions/date"
 import { swalToast } from "@/libs/functions/toast"
 import { getLoggedUserdata } from "@/libs/functions/userdata"
+import { M_Riwayat_log } from "@/libs/services/M_Riwayat"
 import { M_Siswa_getAll } from "@/libs/services/M_Siswa"
 import { M_Surat_create, M_Surat_delete, M_Surat_getAll, M_Surat_update } from "@/libs/services/M_Surat"
 import { faCalendar, faClock, faEdit, faFile, faSave } from "@fortawesome/free-regular-svg-icons"
@@ -103,6 +104,13 @@ export default function SuratPage() {
                 didOpen: async () => {
                     const response = await M_Surat_create(jsonBody);
                     if (response.success) {
+                        await M_Riwayat_log({
+                            aksi: 'Tambah',
+                            keterangan: `Menambah ${jsonBody.length} surat izin siswa`,
+                            payload: jsonBody,
+                            tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
+                            waktu: `${date_getTime()}`
+                        })
                         const pdf = new jsPDF({
                             orientation: 'p',
                             unit: 'mm',
@@ -140,7 +148,7 @@ export default function SuratPage() {
                             }
                         }
             
-                        pdf.save(`Surat Piket - ${jsonBody.length} Siswa - ${date_getDay()} ${date_getMonth('string')} ${date_getYear()}`);
+                        // pdf.save(`Surat Piket - ${jsonBody.length} Siswa - ${date_getDay()} ${date_getMonth('string')} ${date_getYear()}`);
                         const pdfDataUri = pdf.output('datauristring');
             
                         document.getElementById(modal).close();
@@ -264,6 +272,13 @@ export default function SuratPage() {
                         const response = await M_Surat_update(id_surat_izin, payload)
 
                         if(response.success) {
+                            await M_Riwayat_log({
+                                aksi: 'Ubah',
+                                keterangan: `Mengubah surat izin siswa`,
+                                payload: {id_surat_izin, payload},
+                                tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
+                                waktu: `${date_getTime()}`
+                            })
                             await getData()
                             return swalToast.fire({
                                 title: 'Sukses',
@@ -313,6 +328,13 @@ export default function SuratPage() {
                         const response = await M_Surat_delete(id_surat_izin ? id_surat_izin : selectedData)
 
                         if(response.success) {
+                            await M_Riwayat_log({
+                                aksi: 'Hapus',
+                                keterangan: `Menghapus surat izin siswa`,
+                                payload: id_surat_izin ? {id_surat_izin, payload} : {id_surat_izin: selectedData, payload},
+                                tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
+                                waktu: `${date_getTime()}`
+                            })
                             await getData()
                             setSelectedData([])
                             setSelectAllData(false)
@@ -490,6 +512,55 @@ export default function SuratPage() {
         setFilteredDataSiswa(updatedData)
     }, [searchDataSiswa])
 
+    const submitResetData = async () => {
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: 'Anda akan menutup periode piket semester ini',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
+        }).then((answer) => {
+            if(answer.isConfirmed) {
+                Swal.fire({
+                    title: 'Sedang memproses data',
+                    showConfirmButton: false,
+                    timer: 60000,
+                    timerProgressBar: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    didOpen: async () => {
+                        const response = await M_Surat_delete(data.map(value => value['id_surat_izin']))
+
+                        if(response.success) {
+                            await M_Riwayat_log({
+                                aksi: 'Reset',
+                                keterangan: `Mereset semua surat izin siswa`,
+                                tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
+                                waktu: `${date_getTime()}`
+                            })
+                            await getData()
+                            setSelectedData([])
+                            setSelectAllData(false)
+                            Swal.fire({
+                                title: 'Sukses',
+                                text: 'Berhasil menutup periode piket semester ini',
+                                icon: 'success'
+                            })
+                        }else{
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Terdapat kesalahan disaat memproses data, hubungi administrator',
+                                icon: 'error'
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    }
+
     return (
         <MainLayoutPage>
             <Toaster />
@@ -555,9 +626,8 @@ export default function SuratPage() {
                             <FontAwesomeIcon icon={faPlus} className="w-4 h-4 text-inherit" />
                             Buat Surat
                         </button>
-                        <button type="button" onClick={() => document.getElementById('modal_tambah_surat').showModal()} className="w-full lg:w-fit px-3 py-2 rounded-lg bg-red-600 hover:bg-red-500 focus:bg-red-700  text-white flex items-center justify-center gap-3">
-                            <FontAwesomeIcon icon={faRefresh} className="w-4 h-4 text-inherit" />
-                            Reset
+                        <button type="button" onClick={() => submitResetData('bulan')} className="dark:hover:bg-zinc-700 px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100">
+                            Tutup Periode Piket
                         </button>
                     </div>
                     <dialog id="modal_tambah_surat" className="modal">

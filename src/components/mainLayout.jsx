@@ -18,15 +18,15 @@ const mySwal = withReactContent(Swal)
 const ContextLoggedData = createContext()
 
 const navLinkMasterData = [
-    { title: 'Surat', icon: faBookBookmark, url: '/surat', page: 'Data Surat', role: ['Operator', 'Admin']},
+    { title: 'Surat', icon: faBookBookmark, url: '/surat', page: 'Data Surat', role: ['Piket', 'Admin']},
     { title: 'Akun', icon: faUserLock, url: '/akun', page: 'Data Akun', role: ['Admin']},
     { title: 'Riwayat', icon: faTimeline, url: '/riwayat', page: 'Data Riwayat', role: ['Admin']}
 ]
 
 const navLink = [
     ...navLinkMasterData,
-    { title: 'Dashboard', icon: faHouse, url: '/', page: 'Dashboard Page', role: ['Operator', 'Admin']},
-    { title: 'Detail Siswa', icon: faFileCircleExclamation, url: '/detail', page: 'Detail Siswa', role: ['Operator', 'Admin']}
+    { title: 'Dashboard', icon: faHouse, url: '/', page: 'Dashboard Page', role: ['Piket', 'Admin']},
+    { title: 'Detail Siswa', icon: faFileCircleExclamation, url: '/detail', page: 'Detail Siswa', role: ['Piket', 'Admin']}
 ]
 
 export default function MainLayoutPage({children}) {
