@@ -8,16 +8,13 @@ import { M_Siswa_getAll } from "@/libs/services/M_Siswa"
 import { M_Surat_getAll, M_Surat_getAll_nis, M_Surat_getDetail, M_Surat_reset_nis } from "@/libs/services/M_Surat"
 import { faCheck, faEllipsisH, faExclamationCircle, faExclamationTriangle, faInfoCircle, faRefresh, faSearch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
 
 export default function CekSiswaPage() {
     const router = useRouter()
-
-    const searchParams = useSearchParams()
-    const queryNis = searchParams.get('nis')
 
     const [dataSiswa, setDataSiswa] = useState(null)
     const [dataKelas, setDataKelas] = useState(null)
@@ -66,6 +63,8 @@ export default function CekSiswaPage() {
     
 
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const queryNis = params.get('nis')
         if(queryNis === null) {
             if(dataSiswa === null) {
                 document.getElementById(`cari_siswa`).showModal()
@@ -74,47 +73,6 @@ export default function CekSiswaPage() {
             getData(queryNis)
         }
     }, [])
-
-    const submitReset = async () => {
-        Swal.fire({
-            title: 'Apakah anda yakin?',
-            text: 'Anda akan mereset riwayat absensi siswa ini',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Ya',
-            cancelButtonText: 'Tidak'
-        }).then((answer) => {
-            if(answer.isConfirmed) {
-                Swal.fire({
-                    title: 'Sedang memproses data',
-                    showConfirmButton: false,
-                    timer: 60000, 
-                    timerProgressBar: true,
-                    allowOutsideClick: false,
-                    allowEnterKey: false,
-                    allowEscapeKey: false,
-                    didOpen: async () => {
-                        const response = await M_Surat_reset_nis(nis)
-
-                        if(response.success) {
-                            await getData()
-                            Swal.fire({
-                                title: 'Sukses',
-                                text: response.message,
-                                icon: 'success'
-                            })
-                        }else{
-                            Swal.fire({
-                                title: 'Gagal',
-                                text: response.message,
-                                icon: 'success'
-                            })
-                        }
-                    }
-                })
-            }
-        })
-    }
 
     const submitSearch = async (e, modal) => {
         e.preventDefault()
