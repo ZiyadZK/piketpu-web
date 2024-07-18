@@ -331,7 +331,7 @@ export default function SuratPage() {
                             await M_Riwayat_log({
                                 aksi: 'Hapus',
                                 keterangan: `Menghapus surat izin siswa`,
-                                payload: id_surat_izin ? {id_surat_izin, payload} : {id_surat_izin: selectedData, payload},
+                                payload: id_surat_izin ? {id_surat_izin} : {id_surat_izin: selectedData},
                                 tanggal: `${date_getYear()}-${date_getMonth()}-${date_getDay()}`,
                                 waktu: `${date_getTime()}`
                             })
