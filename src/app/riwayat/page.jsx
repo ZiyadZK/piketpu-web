@@ -107,7 +107,7 @@ export default function RiwayatPage() {
                                         </button>
                                     )}
                                     <dialog id={`info_data_${index}`} className="modal">
-                                        <div className="modal-box">
+                                        <div className="modal-box rounded-md dark:bg-zinc-900 border dark:border-zinc-700">
                                             <form method="dialog">
                                                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                             </form>
