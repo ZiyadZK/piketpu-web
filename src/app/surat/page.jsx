@@ -622,12 +622,12 @@ export default function SuratPage() {
                     </div>
                     <hr className="my-3 opacity-0" />
                     <div className="flex items-center gap-3">
-                        <button type="button" onClick={() => document.getElementById('modal_tambah_surat').showModal()} className="w-full lg:w-fit px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 dark:bg-zinc-950 dark:hover:bg-black dark:focus:bg-zinc-800 text-white flex items-center justify-center gap-3">
+                        <button type="button" onClick={() => document.getElementById('modal_tambah_surat').showModal()} className="w-1/2 lg:w-fit px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 focus:bg-blue-700 dark:bg-zinc-950 dark:hover:bg-black dark:focus:bg-zinc-800 text-white flex items-center justify-center gap-3">
                             <FontAwesomeIcon icon={faPlus} className="w-4 h-4 text-inherit" />
                             Buat Surat
                         </button>
                         {loggedAkun && ['Admin'].includes(loggedAkun.role_akun) && (
-                            <button type="button" onClick={() => submitResetData('bulan')} className="dark:hover:bg-zinc-700 px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100">
+                            <button type="button" onClick={() => submitResetData('bulan')} className="dark:hover:bg-zinc-700 px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100 w-1/2 lg:w-fit">
                                 Tutup Periode Piket
                             </button>
                         )}
