@@ -626,9 +626,11 @@ export default function SuratPage() {
                             <FontAwesomeIcon icon={faPlus} className="w-4 h-4 text-inherit" />
                             Buat Surat
                         </button>
-                        <button type="button" onClick={() => submitResetData('bulan')} className="dark:hover:bg-zinc-700 px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100">
-                            Tutup Periode Piket
-                        </button>
+                        {loggedAkun && ['Admin'].includes(loggedAkun.role_akun) && (
+                            <button type="button" onClick={() => submitResetData('bulan')} className="dark:hover:bg-zinc-700 px-3 py-2 rounded-md border dark:border-zinc-700 hover:bg-zinc-100">
+                                Tutup Periode Piket
+                            </button>
+                        )}
                     </div>
                     <dialog id="modal_tambah_surat" className="modal">
                         <div className="modal-box lg:w-full lg:max-w-[600px] dark:bg-zinc-800">
