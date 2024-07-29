@@ -112,7 +112,9 @@ export default function RiwayatPage() {
                                                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                             </form>
                                             <hr className="my-2 opacity-0" />
-                                            <textarea readOnly value={value['json'] !== null && prettyJs(JSON.parse(value['json']))} rows={30} className="border p-3 w-full bg-transparent dark:border-zinc-700 rounded-md"></textarea>
+                                            <textarea readOnly rows={30} value={prettyJs(value['json'])} className="border p-3 w-full bg-transparent dark:border-zinc-700 rounded-md outline-none dark:text-white">
+                                                
+                                            </textarea>
                                         </div>
                                     </dialog>
                                 </div>
