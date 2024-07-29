@@ -465,10 +465,10 @@ export default function AkunPage() {
                                     {value['role_akun']}
                                 </div>
                                 <div className="col-span-5 md:col-span-2 flex items-center text-xs md:text-sm justify-center gap-2">
-                                    <button type="button" onClick={() => document.getElementById(`info_akun_${index}`).showModal()} className="w-6 h-6 rounded bg-blue-500 hover:bg-blue-400 focus:bg-blue-600 md:hidden flex items-center justify-center text-white">
+                                    <button type="button" onClick={() => document.getElementById(`info_akun__${value['id_akun']}`).showModal()} className="w-6 h-6 rounded bg-blue-500 hover:bg-blue-400 focus:bg-blue-600 md:hidden flex items-center justify-center text-white">
                                         <FontAwesomeIcon icon={faSearch} className="w-3 h-3 text-inherit" />
                                     </button>
-                                    <dialog id={`info_akun_${index}`} className="modal">
+                                    <dialog id={`info_akun__${value['id_akun']}`} className="modal">
                                         <div className="modal-box bg-white dark:bg-zinc-800">
                                             <form method="dialog">
                                                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
@@ -519,17 +519,17 @@ export default function AkunPage() {
                                             </div>
                                         </div>
                                     </dialog>
-                                    <button type="button" onClick={() => document.getElementById(`ubah_akun_${index}`).showModal()} className="w-6 h-6 rounded bg-amber-500 hover:bg-amber-400 focus:bg-amber-600 flex items-center justify-center text-white">
+                                    <button type="button" onClick={() => document.getElementById(`ubah_akun__${value['id_akun']}`).showModal()} className="w-6 h-6 rounded bg-amber-500 hover:bg-amber-400 focus:bg-amber-600 flex items-center justify-center text-white">
                                         <FontAwesomeIcon icon={faEdit} className="w-3 h-3 text-inherit" />
                                     </button>
-                                    <dialog id={`ubah_akun_${index}`} className="modal">
+                                    <dialog id={`ubah_akun__${value['id_akun']}`} className="modal">
                                         <div className="modal-box bg-white dark:bg-zinc-800">
                                             <form method="dialog">
                                                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                             </form>
                                             <h3 className="font-bold text-lg">Ubah Akun</h3>
                                             <hr className="my-2 opacity-0" />
-                                            <form onSubmit={e => submitUbahAkun(e, `ubah_akun_${index}`, value['id_akun'])} className="space-y-2">
+                                            <form onSubmit={e => submitUbahAkun(e, `ubah_akun__${value['id_akun']}`, value['id_akun'])} className="space-y-2">
                                                 <div className="flex flex-col md:flex-row md:items-center gap-1">
                                                     <p className="opacity-70 w-full md:w-2/5">
                                                         Nickname
