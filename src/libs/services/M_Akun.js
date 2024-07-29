@@ -38,8 +38,6 @@ export const M_Akun_login = async (email_akun, password_akun, duration) => {
 export const M_Akun_create = async (payload) => {
     const response = await api_post('/v1/data/akun', payload)
 
-    await M_Riwayat_log('Tambah', `Menambahkan ${Array.isArray(payload) ? payload.length : '1'} Data ke dalam Data Akun`, payload)
-
     return {
         success: response.success,
         message: response.message,
@@ -50,8 +48,6 @@ export const M_Akun_create = async (payload) => {
 export const M_Akun_update = async (id_akun, payload) => {
     const response = await api_put('/v1/data/akun', {id_akun, payload})
 
-    await M_Riwayat_log('Ubah', `Mengubah ${Array.isArray(id_akun) ? id_akun.length : '1'} Data dari Data Akun`, {id_akun, payload})
-
     return {
         success: response.success,
         message: response.message,
@@ -61,8 +57,6 @@ export const M_Akun_update = async (id_akun, payload) => {
 
 export const M_Akun_delete = async (id_akun) => {
     const response = await api_delete('/v1/data/akun', {id_akun})
-
-    await M_Riwayat_log('Hapus', `Menghapus ${Array.isArray(id_akun) ? id_akun.length : '1'} Data dari Data Akun`, {id_akun})
 
     return {
         success: response.success,

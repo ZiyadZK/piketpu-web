@@ -223,8 +223,28 @@ export default function AkunPage() {
         setLoadingFetch('loading')
         const response = await M_Akun_getAll()
         if(response.success) {
-            setData(response.data)
-            setFilteredData(response.data)
+            setData(response.data.sort((a, b) => {
+                if(a.nama_akun < b.nama_akun) {
+                    return -1
+                }
+
+                if(a.nama_akun > b.nama_akun) {
+                    return 1
+                }
+
+                return 0
+            })) 
+            setFilteredData(response.data.sort((a, b) => {
+                if(a.nama_akun < b.nama_akun) {
+                    return -1
+                }
+
+                if(a.nama_akun > b.nama_akun) {
+                    return 1
+                }
+
+                return 0
+            }))
         }
         setLoadingFetch('fetched')
     }
@@ -269,6 +289,22 @@ export default function AkunPage() {
     useEffect(() => {
         filterDataPegawai()
     }, [searchDataPegawai])
+
+    useEffect(() => {
+
+        let updatedData = data
+
+        if(searchValue !== '') {
+            updatedData = updatedData.filter(value =>
+                value['email_akun'].toLowerCase().includes(searchValue.toLowerCase()) ||
+                value['nama_akun'].toLowerCase().includes(searchValue.toLowerCase()) ||
+                value['nickname_akun'].toLowerCase().includes(searchValue.toLowerCase()) ||
+                value['password_akun'].toLowerCase().includes(searchValue.toLowerCase())
+            )
+        } 
+
+        setFilteredData(updatedData)
+    }, [searchValue])
 
     const selectDataPegawai = (piket_id_pegawai, nama_akun, email_akun) => {
         setSelectedDataPegawai({piket_id_pegawai, nama_akun, email_akun})
