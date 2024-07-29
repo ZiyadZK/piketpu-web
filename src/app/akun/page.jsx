@@ -444,7 +444,7 @@ export default function AkunPage() {
                 {loadingFetch === 'fetched' && (
                     <div className="space-y-2 my-1 relative overflow-auto max-h-[300px] md:max-h-[400px]">
                         {filteredData.slice(pagination === 1 ? totalList - totalList : (totalList * pagination) - totalList, totalList * pagination).map((value, index) => (
-                            <div key={index} className="grid grid-cols-12 rounded-xl dark:hover:bg-zinc-950/50 hover:bg-zinc-100 *:px-3 *:py-3 transition-all duration-300">
+                            <div key={`akun_${value['id_akun']}`} className="grid grid-cols-12 rounded-xl dark:hover:bg-zinc-950/50 hover:bg-zinc-100 *:px-3 *:py-3 transition-all duration-300">
                                 <div className="col-span-3 hidden md:flex items-center text-xs md:text-sm gap-2">
                                     <input type="checkbox" checked={selectedData.includes(value['id_akun'])} onChange={() => handleSelectedData(value['id_akun'])} />
                                     <div className="">
