@@ -83,9 +83,7 @@ export default function AkunPage() {
 
         const jsonBody = {
             piket_id_pegawai: selectedDataPegawai['piket_id_pegawai'],
-            nama_akun: selectedDataPegawai['nama_akun'],
             nickname_akun: event.target[0].value,
-            email_akun: selectedDataPegawai['email_akun'],
             password_akun: event.target[1].value,
             role_akun: event.target[2].value
         }
