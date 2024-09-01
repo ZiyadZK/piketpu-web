@@ -2,13 +2,14 @@
 
 import MainLayoutPage from "@/components/mainLayout"
 import { date_getDay, date_getMonth, date_getMonthRange, date_getTime, date_getYear } from "@/libs/functions/date"
+import { excel } from "@/libs/functions/excel"
 import { swalToast } from "@/libs/functions/toast"
 import { getLoggedUserdata } from "@/libs/functions/userdata"
 import { M_Riwayat_log } from "@/libs/services/M_Riwayat"
 import { M_Siswa_getAll } from "@/libs/services/M_Siswa"
 import { M_Surat_create, M_Surat_delete, M_Surat_getAll, M_Surat_update } from "@/libs/services/M_Surat"
 import { faCalendar, faClock, faEdit, faFile, faSave } from "@fortawesome/free-regular-svg-icons"
-import { faEllipsisH, faPlus, faPrint, faRefresh, faSearch, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faEllipsisH, faPlus, faPrint, faRefresh, faSearch, faTrash, faUpload, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import html2canvas from "html2canvas-pro"
 import jsPDF from "jspdf"
@@ -156,6 +157,8 @@ export default function SuratPage() {
                         setSelectedData([]);
                         setPrintedData([])
                         await getData();
+                        e.target[0].value = ''
+                        e.target[1].value = ''
                         Swal.fire({
                             title: 'Sukses',
                             text: "Berhasil membuat surat tersebut!",
@@ -555,6 +558,41 @@ export default function SuratPage() {
                                 icon: 'error'
                             })
                         }
+                    }
+                })
+            }
+        })
+    }
+
+    const handleExportData = async () => {
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: `Anda akan mengexport ${selectedData.length < 1 ? 'semua' : selectedData.length} siswa ke dalam excel`,
+            icon: 'question',
+            showCancelButton: true,
+            allowEnterKey: false,
+            allowOutsideClick: false
+        }).then((answer) => {
+            if(answer.isConfirmed) {
+                Swal.fire({
+                    timer: 6000,
+                    timerProgressBar: true,
+                    title: 'Sedang memproses data',
+                    allowOutsideClick: false,
+                    didOpen: async () => {
+
+                        const dataArr = selectedData.length > 1 ? data.filter(v => selectedData.includes(v['nis_siswa'])) : data
+
+                        await excel.to_xlsx(dataArr, 'DATA SIKAP', {
+                            header: Object.keys(data[0]),
+                            sheetName: 'DATA SIKAP'
+                        })
+
+                        Swal.fire({
+                            title: 'Sukses',
+                            icon: 'success',
+                            text: 'Berhasil mengexport data tersebut'
+                        })
                     }
                 })
             }
@@ -1035,6 +1073,9 @@ export default function SuratPage() {
                                     <FontAwesomeIcon icon={faXmark} className="w-3 h-3 text-inherit" />
                                 </button>
                             </div>}
+                            <button type="button" onClick={() => handleExportData()} className="w-6 h-6 flex items-center justify-center bg-zinc-200 text-zinc-700 rounded hover:bg-zinc-300">
+                                <FontAwesomeIcon icon={faUpload} className="w-3 h-3 text-inherit" />
+                            </button>
                         </div>
                         <div className="flex items-center justify-between w-full md:w-fit gap-5">
                             <p>{data.length} Data</p>
