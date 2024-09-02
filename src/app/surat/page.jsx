@@ -57,6 +57,10 @@ export default function SuratPage() {
     const [printedData, setPrintedData] = useState([])
     const componentPDF = useRef([])
 
+    const tambahSurat = () => {
+
+    }
+
     const submitFormTambah = async (e, modal) => {
         e.preventDefault();
     
@@ -775,7 +779,7 @@ export default function SuratPage() {
                                     <p className="w-full md:w-2/5 opacity-70">
                                         Tipe
                                     </p>
-                                    <select className="w-full md:w-3/5 px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none cursor-pointer dark:bg-zinc-800">
+                                    <select defaultValue="" className="w-full md:w-3/5 px-3 py-1 rounded border dark:bg-transparent dark:border-zinc-700 dark:hover:border-zinc-400 dark:focus:border-zinc-400 dark:outline-none cursor-pointer dark:bg-zinc-800">
                                         <option value="" disabled>-- Pilih Tipe --</option>
                                         <option value="Mengikuti Pelajaran">Mengikuti Pelajaran</option>
                                         <option value="Meninggalkan Pelajaran">Meninggalkan Pelajaran</option>
